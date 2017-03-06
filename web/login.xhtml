@@ -1,25 +1,94 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://java.sun.com/jsf/html">
-<h:head>
-	<title>login</title>
-</h:head>
-<h:body>
-	<h:form>
-		<h3>JSF Login Logout</h3>
-		<h:outputText value="Username" />
-		<h:inputText id="username" value="#{login.user}"></h:inputText>
-		<h:message for="username"></h:message>
-		<br></br><br></br>
-		
-		<h:outputText value="Password" />
-		<h:inputSecret id="password" value="#{login.pwd}"></h:inputSecret>
-		<h:message for="password"></h:message>
-		<br></br><br></br>
-		
-		<h:commandButton action="#{login.validateUsernamePassword}"
-			value="Login"></h:commandButton>
-	</h:form>
-</h:body>
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:jsf="http://xmlns.jcp.org/jsf"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>login</title>
+        <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+        <link href = "//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel = "stylesheet"></link>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    </h:head>
+    <h:body>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3">
+                    <div class="panel panel-login">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <a href="#" class="active" id="login-form-link">Login</a>
+                                </div>
+                                <div class="col-xs-6">
+                                    <a href="#" id="register-form-link">Register</a>
+                                </div>
+                            </div>
+                            <hr></hr>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <h:form id="login-form" role="form" style="display: block;">
+                                        <div jsf:id="login-fields">
+                                            <div class="form-group">
+                                                <p:inputText id="register-email" styleClass="form-control" type="email" value="#{userBean.user.email}" placeholder="Email Address" required="true" requiredMessage="The email field is required." validatorMessage="Invalid email format">
+                                                    <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                                                </p:inputText>
+                                                <p:message for="register-email" display="text" />
+                                            </div>
+                                            <div class="form-group">
+                                                <p:inputText id="register-password" styleClass="form-control" type="password" value="#{userBean.user.password}" placeholder="Password" required="true" requiredMessage="The password field is required."/>
+                                                <p:message for="register-password" display="text" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-sm-6 col-sm-offset-3">
+                                                    <p:commandButton actionListener="#{userBean.login()}" value="Log In" class="form-control btn btn-login" type="submit" update="login-fields"/>
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </h:form>
+                                    <h:form id="register-form" role="form" style="display: none;">
+                                        <div jsf:id="register-fields">
+                                            <div class="form-group">
+                                                <p:inputText id="register-email" styleClass="form-control" type="email" value="#{userBean.user.email}" placeholder="Email Address" required="true" requiredMessage="The email field is required." validatorMessage="Invalid email format">
+                                                    <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                                                </p:inputText>
+
+                                                <p:message for="register-email" display="text" />
+                                            </div>
+                                            <div class="form-group">
+                                                <p:password id="register-password" styleClass="form-control" value="#{userBean.user.password}" placeholder="Password" match="register-confirm" required="true" requiredMessage="The password field is required" validatorMessage="The password confirmation does not match."/>
+                                                <p:message for="register-password" display="text" />
+                                            </div>
+                                            <div class="form-group">
+                                                <p:password id="register-confirm" styleClass="form-control" value="#{userBean.user.password}" placeholder="Confirm Password" required="true" requiredMessage="The password field is required."/>
+                                                <p:message for="register-confirm" display="text" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-sm-6 col-sm-offset-3">
+                                                    <p:commandButton actionListener="#{userBean.register()}" value="Register Now" class="form-control btn btn-register" type="submit" update="register-fields"/>
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </h:form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <link rel="stylesheet" type="text/css" href="bootstrap/css/login.css"></link>
+        <script src="bootstrap/js/login.js"></script>
+    </h:body>
 </html>
