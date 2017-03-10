@@ -9,7 +9,7 @@ import javax.inject.Named;
 import entities.DepartementEntity;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.PostConstruct;
@@ -41,11 +41,11 @@ public class DepartementBean implements Serializable {
     @PostConstruct
     public void init() {
         System.out.println("INIT STARTED");
-        departments = new HashMap<>();
-        departments.put("Ain","Ain");
-        departments.put("Aube","Aube");
-        departments.put("Bouches-du-Rhône","Bouches-du-Rhône");
-        departments.put("Aisne","Aisne");
+        departments = new LinkedHashMap<>();
+        List<String> arrayLibDep = facade.getAllNamesDepartement();        
+        arrayLibDep.forEach(s -> departments.put(s,s));
+        
+        
         System.out.println(departments.size());
     }
 
