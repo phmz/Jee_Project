@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>login</title>
+        <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+        <link href = "//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel = "stylesheet"></link>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="//cdn.jsdelivr.net/bootstrap.tagsinput/0.4.2/bootstrap-tagsinput.css" />
+        <script src="//cdn.jsdelivr.net/bootstrap.tagsinput/0.4.2/bootstrap-tagsinput.min.js"></script>
+        <script src="bootstrap/js/typeahead.bundle.js"></script>
+
+    </h:head>
+    <h:body>
+        <h:form id="tags-form" class="form-horizontal">
+            <br/>
+            <div class="form-group">
+                <label class="col-xs-3 control-label">Keywords</label>
+                <div class="col-xs-8">
+                    <input class="tagsinput-typeahead" type="text" id="tags-form:keywords" name="tags-form:keywords" />
+                </div>
+            </div>
+            <script>
+                var tags = #{requestBean.possibleTags};
+
+
+                $('.tagsinput-typeahead').tagsinput({
+                    typeahead: {
+                        source: tags.map(function (item) {
+                            return item.name;
+                        }),
+                        afterSelect: function () {
+                            this.$element[0].value = '';
+                        }
+                    }
+                });
+            </script>
+            <div class="form-group">
+                <label class="col-xs-3 control-label">Department</label>
+                <div class="col-xs-8">
+                    <h:selectOneMenu id="city" value="#{requestBean.tags}" style="width:150px">
+                        <f:selectItem itemLabel="Select City" itemValue="" noSelectionOption="true" />
+                        <f:selectItems value="#{departement.departments}" />
+                    </h:selectOneMenu>
+
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-xs-5 col-xs-offset-3">
+                    <p:commandButton class="btn btn-default" actionListener="#{requestBean.addTagToRequest()}" value="Search" type="submit"/>
+                </div>
+            </div>
+        </h:form>
+        <link rel="stylesheet" type="text/css" href="bootstrap/css/search.css"></link>
+
+
+
+
+    </h:body>
+</html>

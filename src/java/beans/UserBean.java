@@ -14,6 +14,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
+import javax.faces.context.FacesContext;
 import sessions.UserEntityFacade;
 
 /**
@@ -89,6 +90,7 @@ public class UserBean implements Serializable {
             if (this.user.getPassword().equals(user.getPassword())) {
                 System.out.println("LOGIN SUCCESS");
                 // DO SOMETHING
+                goToSearch();
             } else {
                 System.out.println("LOGIN FAILED WRONG PASSWORD");
                 // DO SOMETHING
@@ -103,9 +105,14 @@ public class UserBean implements Serializable {
             messageDigest.update(password.getBytes());
             return new String(messageDigest.digest());
         } catch (NoSuchAlgorithmException ex) {
-            Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, "Could not digest password", ex);
         }
         return null;
+    }
+
+    private void goToSearch() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.getApplication().getNavigationHandler().handleNavigation(context, null, "/search.xhtml");
     }
 
 }
