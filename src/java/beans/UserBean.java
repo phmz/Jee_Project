@@ -112,7 +112,7 @@ public class UserBean implements Serializable {
 
     private void goToSearch() {
         FacesContext context = FacesContext.getCurrentInstance();
-        context.getApplication().getNavigationHandler().handleNavigation(context, null, "/search.xhtml");
+        context.getApplication().getNavigationHandler().handleNavigation(context, null, "/search.xhtml?faces-redirect=true");
     }
 
 }

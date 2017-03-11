@@ -24,8 +24,6 @@
             </div>
             <script>
                 var tags = #{requestBean.possibleTags};
-
-
                 $('.tagsinput-typeahead').tagsinput({
                     typeahead: {
                         source: tags.map(function (item) {
@@ -39,24 +37,22 @@
             </script>
             <div class="form-group">
                 <label class="col-xs-3 control-label">Department</label>
-                <div class="col-xs-8">
-                    <h:selectOneMenu id="city" value="#{requestBean.tags}" style="width:150px">
-                        <f:selectItem itemLabel="Select Department" itemValue="" noSelectionOption="true" />
+                <div class="dropdown col-xs-8">
+                    <h:selectOneMenu id="city" value="#{requestBean.tags}" style="width:150px" class="dropbtn">
+                        <f:selectItem itemLabel="Select Department" itemValue="" noSelectionOption="true" class="dropdown-content" />
                         <f:selectItems value="#{departement.departments}" />
                     </h:selectOneMenu>
-
                 </div>
             </div>
             <div class="form-group">
-                <div class="col-xs-5 col-xs-offset-3">
-                    <p:commandButton class="btn btn-default" actionListener="#{requestBean.addTagToRequest()}" value="Search" type="submit"/>
+                <div class="col-xs-1 col-xs-offset-3">
+                    <p:commandButton class="form-control btn btn-search" actionListener="#{requestBean.addTagToRequest()}" value="Search" type="submit"/>
                 </div>
             </div>
         </h:form>
-        <h:outputStylesheet library="css" name="search.css"/>
-
-
+        <link rel="stylesheet" type="text/css" href="resources/css/search.css"></link>
+        <h:outputStylesheet library="css" name="search.css"  />
     </h:body>
-    
-    
+
+
 </html>
