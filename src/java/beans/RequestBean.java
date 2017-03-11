@@ -5,6 +5,7 @@
  */
 package beans;
 
+import entities.InstallationEntity;
 import entities.RequestEntity;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
@@ -12,14 +13,17 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import javax.annotation.ManagedBean;
 import javax.ejb.EJB;
 import javax.faces.context.FacesContext;
+import sessions.InstallationEntityFacade;
 import sessions.RequestEntityFacade;
 
 /**
  *
  * @author phm
  */
+@ManagedBean
 @Named(value = "requestBean")
 @SessionScoped
 public class RequestBean implements Serializable {
@@ -27,19 +31,34 @@ public class RequestBean implements Serializable {
     @EJB
     RequestEntityFacade facade;
 
+    @EJB
+    InstallationEntityFacade installfacade;
+    
+    /*@ManagedProperty(value="#{departement}")
+    private DepartementBean departement;
+    */
     private RequestEntity request;
 
-    private String tags;
+    private String department;
 
     private String possibleTags = "[{name: \"Parking\"},{name: \"Parking handicapé\"},{name: \"Accessibilité handicapé moteur\"},{name: \"Accessibilité handicapé sensoriel\"},{name: \"Bus\"},{name: \"Tram\"},{name: \"Train\"},{name: \"Metro\"}]";
 
+    private List<InstallationEntity> installationList;
+
+    public List<InstallationEntity> getInstallationList() {
+        return installationList;
+    }
+
+    public void setInstallationList(List<InstallationEntity> installationList) {
+        this.installationList = installationList;
+    }
+    
     /**
      * Creates a new instance of UserBean
-     */
+     */    
     public RequestBean() {
         request = new RequestEntity();
     }
-
     public List<String> completeText() {
         String query = "a";
         List<String> results = new ArrayList<String>();
@@ -50,12 +69,12 @@ public class RequestBean implements Serializable {
         return results;
     }
     
-    public String getTags() {
-        return tags;
+    public String getDepartment() {
+        return department;
     }
 
-    public void setTags(String tags) {
-        this.tags = tags;
+    public void setDepartment(String department) {
+        this.department = department;
     }
 
     public RequestEntity getRequest() {
@@ -77,19 +96,22 @@ public class RequestBean implements Serializable {
     public void addTagToRequest() {
         String tag = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("tags-form:keywords");
         if(tag.isEmpty()) {
+            installationList = installfacade.search("", department);
             return;
         }
         String tagsArray[] = tag.split(",");
         HashMap<String, String> tagsMap = fillTagsMap();
         StringBuilder sb = new StringBuilder();
+        sb.append("");
         if (tagsArray.length > 0) {
-            sb.append("WHERE ").append("i.").append(tagsMap.get(tagsArray[0])).append(" > 0");
+            //sb.append("WHERE ").append("i.").append(tagsMap.get(tagsArray[0])).append(" > 0");
+            sb.append("i.").append(tagsMap.get(tagsArray[0])).append(" > 0");
             for (int i = 1; i < tagsArray.length; i++) {
-                sb.append(" & ").append("i.").append(tagsMap.get(tagsArray[i])).append(" > 0");
+                sb.append(" AND ").append("i.").append(tagsMap.get(tagsArray[i])).append(" > 0");
             }
         }
-        System.out.println(sb.toString());
-        System.out.println(tags);
+        
+        installationList = installfacade.search(sb.toString(), department);
     }
 
     private HashMap<String, String> fillTagsMap() {

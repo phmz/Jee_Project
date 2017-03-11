@@ -38,7 +38,7 @@
             <div class="form-group">
                 <label class="col-xs-3 control-label">Department</label>
                 <div class="dropdown col-xs-8">
-                    <h:selectOneMenu id="city" value="#{requestBean.tags}" style="width:150px" class="dropbtn">
+                    <h:selectOneMenu id="city" value="#{requestBean.department}" style="width:150px" class="dropbtn">
                         <f:selectItem itemLabel="Select Department" itemValue="" noSelectionOption="true" class="dropdown-content" />
                         <f:selectItems value="#{departement.departments}" />
                     </h:selectOneMenu>
@@ -46,12 +46,50 @@
             </div>
             <div class="form-group">
                 <div class="col-xs-1 col-xs-offset-3">
-                    <p:commandButton class="form-control btn btn-search" actionListener="#{requestBean.addTagToRequest()}" value="Search" type="submit"/>
+                    <p:commandButton update="datatable" class="form-control btn btn-search" actionListener="#{requestBean.addTagToRequest()}" value="Search" type="submit">
+                     <f:ajax render="formId"/>
+                    </p:commandButton>
+                                    
                 </div>
             </div>
+            
+            <p:dataTable id="datatable" var="install" value="#{requestBean.installationList}" rows="10"
+                         paginator="true"
+                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         rowsPerPageTemplate="5,10,15"
+                         widgetVar="datatable">
+                <f:facet name="header">                    
+                    <p:outputPanel>
+                    <h:outputText value="Search all fields:" />
+                        <p:inputText id="globalFilter" onkeyup="PF('datatable').filter()" style="width:150px" placeholder="Enter keyword"/>
+                    </p:outputPanel>
+                </f:facet>
+                <p:column headerText="Nom" filterBy="#{install.insNom}" sortBy="#{install.insNom}" filterMatchMode="contains">
+                    <h:outputText value="#{install.insNom}" />
+                </p:column>
+                
+                <p:column headerText="Voie" filterBy="#{install.insLibelleVoie}" sortBy="#{install.insLibelleVoie}" filterMatchMode="contains">
+                    <h:outputText value="#{install.insNoVoie} #{install.insLibelleVoie}" />
+                </p:column>
+                
+                <p:column headerText="Code Postal" filterBy="#{install.insCodePostal}" sortBy="#{install.insCodePostal}" filterMatchMode="contains">
+                    <h:outputText value="#{install.insCodePostal}" />
+                </p:column>
+                
+                <p:column headerText="Commune" filterBy="#{install.comInsee.comLib}" sortBy="#{install.comInsee.comLib}" filterMatchMode="contains">
+                    <h:outputText value="#{install.comInsee.comLib}" />
+                </p:column>
+ 
+                <!--<p:column headerText="Place de parking" filterBy="#{install.insNbPlaceParking}" sortBy="#{install.insNbPlaceParking}" filterMatchMode="contains">
+                    <h:outputText value="#{install.insNbPlaceParking}" />
+                </p:column>-->
+
+
+
+            </p:dataTable>
         </h:form>
         <link rel="stylesheet" type="text/css" href="resources/css/search.css"></link>
-        <h:outputStylesheet library="css" name="search.css"  />
+        <h:outputStylesheet library="css" name="search.css"  />                               
     </h:body>
 
 

@@ -12,6 +12,7 @@ import java.io.Serializable;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import javax.annotation.ManagedBean;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import sessions.DepartementEntityFacade;
@@ -22,6 +23,7 @@ import sessions.DepartementEntityFacade;
  */
 @Named(value = "departement")
 @SessionScoped
+@ManagedBean
 public class DepartementBean implements Serializable {
     
     @EJB
@@ -43,9 +45,7 @@ public class DepartementBean implements Serializable {
         System.out.println("INIT STARTED");
         departments = new LinkedHashMap<>();
         List<String> arrayLibDep = facade.getAllNamesDepartement();        
-        arrayLibDep.forEach(s -> departments.put(s,s));
-        
-        
+        arrayLibDep.forEach(s -> departments.put(s,s));               
         System.out.println(departments.size());
     }
 
@@ -63,10 +63,5 @@ public class DepartementBean implements Serializable {
 
     public void setDepartments(Map<String, String> departments) {
         this.departments = departments;
-    }
-    
-    
-   
-    
-    
+    }               
 }
