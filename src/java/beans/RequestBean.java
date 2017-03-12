@@ -12,10 +12,14 @@ import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import javax.annotation.ManagedBean;
 import javax.ejb.EJB;
+import javax.enterprise.context.RequestScoped;
 import javax.faces.context.FacesContext;
+import sessions.CommuneEntityFacade;
 import sessions.InstallationEntityFacade;
 import sessions.RequestEntityFacade;
 
@@ -25,25 +29,29 @@ import sessions.RequestEntityFacade;
  */
 @ManagedBean
 @Named(value = "requestBean")
-@SessionScoped
+@RequestScoped
 public class RequestBean implements Serializable {
 
     @EJB
     RequestEntityFacade facade;
 
     @EJB
+    CommuneEntityFacade cityfacade;
+    
+    @EJB
     InstallationEntityFacade installfacade;
     
-    /*@ManagedProperty(value="#{departement}")
-    private DepartementBean departement;
-    */
     private RequestEntity request;
 
     private String department;
 
+    private String city;
+    
     private String possibleTags = "[{name: \"Parking\"},{name: \"Parking handicapé\"},{name: \"Accessibilité handicapé moteur\"},{name: \"Accessibilité handicapé sensoriel\"},{name: \"Bus\"},{name: \"Tram\"},{name: \"Train\"},{name: \"Metro\"}]";
 
     private List<InstallationEntity> installationList;
+
+    private Map<String,String> citys;
 
     public List<InstallationEntity> getInstallationList() {
         return installationList;
@@ -93,10 +101,29 @@ public class RequestBean implements Serializable {
         this.possibleTags = possibleTags;
     }
 
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public Map<String, String> getCitys() {
+        return citys;
+    }
+
+    public void setCitys(Map<String, String> citys) {
+        this.citys = citys;
+    }
+    
+    
+
     public void addTagToRequest() {
+        System.err.println("Debut addTag");
         String tag = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("tags-form:keywords");
         if(tag.isEmpty()) {
-            installationList = installfacade.search("", department);
+            installationList = installfacade.search("", department,city);
             return;
         }
         String tagsArray[] = tag.split(",");
@@ -111,11 +138,11 @@ public class RequestBean implements Serializable {
             }
         }
         
-        installationList = installfacade.search(sb.toString(), department);
+        installationList = installfacade.search(sb.toString(), department,city);
     }
 
     private HashMap<String, String> fillTagsMap() {
-        HashMap<String, String> tagsMap = new HashMap<String, String>();
+        HashMap<String, String> tagsMap = new HashMap<>();
         tagsMap.put("Parking", "InsNbPlaceParking");
         tagsMap.put("Parking handicapé", "InsNbPlaceParkingHandi");
         tagsMap.put("Accessibilité handicapé moteur", "InsAccessibiliteHandiMoteur");
@@ -125,5 +152,10 @@ public class RequestBean implements Serializable {
         tagsMap.put("Train", "InsTransportTrain");
         tagsMap.put("Metro", "InsTransportMetro");
         return tagsMap;
+    }
+    
+    public void stateChangeListener(){
+        System.out.println("Entering stageChangeListener");
+        citys = cityfacade.getNamesCommuneDept(department);        
     }
 }

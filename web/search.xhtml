@@ -38,12 +38,25 @@
             <div class="form-group">
                 <label class="col-xs-3 control-label">Department</label>
                 <div class="dropdown col-xs-8">
-                    <h:selectOneMenu id="city" value="#{requestBean.department}" style="width:150px" class="dropbtn">
+                    <h:selectOneMenu id="departmentmenu" value="#{requestBean.department}" style="width:150px" class="dropbtn">
                         <f:selectItem itemLabel="Select Department" itemValue="" noSelectionOption="true" class="dropdown-content" />
-                        <f:selectItems value="#{departement.departments}" />
+                        <f:selectItems value="#{departement.departments}" var="departmentlabel" itemLabel="#{departmentlabel.name}"/>
+                        <f:ajax listener="#{requestBean.stateChangeListener}" render="citymenu" />
                     </h:selectOneMenu>
                 </div>
             </div>
+            
+            <div class="form-group">
+                <label class="col-xs-3 control-label">City</label>
+                <div class="dropdown col-xs-8">
+                    <h:selectOneMenu id="citymenu" value="#{requestBean.city}" style="width:150px" class="dropbtn">
+                        <f:selectItem itemLabel="Select City" itemValue="" noSelectionOption="true" class="dropdown-content" />
+                        <f:selectItems value="#{requestBean.citys}" />
+                    </h:selectOneMenu>
+                </div>
+            </div>
+            <br></br>
+            <br></br>
             <div class="form-group">
                 <div class="col-xs-1 col-xs-offset-3">
                     <p:commandButton update="datatable" class="form-control btn btn-search" actionListener="#{requestBean.addTagToRequest()}" value="Search" type="submit">
@@ -84,9 +97,7 @@
                     <h:outputText value="#{install.insNbPlaceParking}" />
                 </p:column>-->
 
-
-
-            </p:dataTable>
+            </p:dataTable>                       
         </h:form>
         <link rel="stylesheet" type="text/css" href="resources/css/search.css"></link>
         <h:outputStylesheet library="css" name="search.css"  />                               

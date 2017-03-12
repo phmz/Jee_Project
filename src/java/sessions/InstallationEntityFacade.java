@@ -31,27 +31,28 @@ public class InstallationEntityFacade extends AbstractFacade<InstallationEntity>
         super(InstallationEntity.class);
     }
     
-    public List<InstallationEntity> search(String tags, String departementLib){
-        
+    public List<InstallationEntity> search(String tags, String departementLib, String cityLib){
         String queryString = "SELECT i.* FROM Installation i "
-                                           +"NATURAL JOIN Commune NATURAL JOIN Departement d "
+                             +"NATURAL JOIN Commune c NATURAL JOIN Departement d "
+                             +"WHERE c.ComLib = '"+cityLib+"'"; 
+        if(!(cityLib == null)){
+            if(!("".equals(tags))){
+                queryString+=" AND "+tags;
+            }
+        } else{
+            queryString = "SELECT i.* FROM Installation i "
+                                           +"NATURAL JOIN Commune c NATURAL JOIN Departement d "
                                            +"WHERE d.deplib = '" + departementLib+"'";
         
-        System.out.println(queryString);
-        if(!("".equals(tags))){
-            queryString+=" AND "+tags;
-        }
         
+            if(!("".equals(tags))){
+                queryString+=" AND "+tags;
+            }
+        }
+        System.out.println(queryString);
         Query query = em.createNativeQuery(queryString,InstallationEntity.class);
         
-        List<InstallationEntity> array = query.getResultList();
-        
-        //Query query2 = em.createNativeQuery("SELECT c.* FROM Commune c "+
-        //query.get
-        array.forEach(s -> System.out.println(s.getComInsee().getComLib()));
-        
-        return array;
-        
-        
+        List<InstallationEntity> array = query.getResultList();            
+        return array;                
     }
 }

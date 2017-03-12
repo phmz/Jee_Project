@@ -6,9 +6,13 @@
 package sessions;
 
 import entities.CommuneEntity;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -29,4 +33,15 @@ public class CommuneEntityFacade extends AbstractFacade<CommuneEntity> {
         super(CommuneEntity.class);
     }
     
+    public Map<String,String> getNamesCommuneDept(String depLib){
+        String queryString = "SELECT c.* FROM Commune c NATURAL JOIN Departement d"
+                             +" WHERE d.depLib = '"+depLib+"'"; 
+        Query query = em.createNativeQuery(queryString,CommuneEntity.class);
+        
+        List<CommuneEntity> communes = query.getResultList();    
+        
+        Map<String,String> maps = new LinkedHashMap<>();
+        communes.forEach(c -> maps.put(c.getComLib(),c.getComInsee()));    
+        return maps;
+    }
 }
