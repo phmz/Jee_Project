@@ -175,7 +175,7 @@ public class RequestBean implements Serializable {
                 sb.append(" AND ").append("i.").append(tagsMap.get(tagsArray[i])).append(" > 0");
             }
         }
-        tags = tag;
+        tags = tag.replace(",", ", ");
         installationList = installfacade.search(sb.toString(), department, city);
         initCurrentList();
     }
@@ -200,10 +200,16 @@ public class RequestBean implements Serializable {
 
     public void nextPage() {
         System.out.println("Getting next page");
+        if ((currentPage+1) * elementPerPage > installationList.size()) {
+            return;
+        }
         currentInstallationList.clear();
         currentPage++;
         for (int i = 0; i < elementPerPage; i++) {
-            currentInstallationList.add(installationList.get(elementPerPage * currentPage + i));
+            int index = elementPerPage * currentPage + i;
+            if (installationList.size() > index) {
+                currentInstallationList.add(installationList.get(elementPerPage * currentPage + i));
+            }
         }
     }
 
@@ -215,7 +221,10 @@ public class RequestBean implements Serializable {
         currentInstallationList.clear();
         currentPage--;
         for (int i = 0; i < elementPerPage; i++) {
-            currentInstallationList.add(installationList.get(elementPerPage * currentPage + i));
+            int index = elementPerPage * currentPage + i;
+            if (installationList.size() > index) {
+                currentInstallationList.add(installationList.get(elementPerPage * currentPage + i));
+            }
         }
     }
 
@@ -224,7 +233,10 @@ public class RequestBean implements Serializable {
         currentInstallationList.clear();
         currentPage = 0;
         for (int i = 0; i < elementPerPage; i++) {
-            currentInstallationList.add(installationList.get(elementPerPage * currentPage + i));
+            int index = elementPerPage * currentPage + i;
+            if (installationList.size() > index) {
+                currentInstallationList.add(installationList.get(elementPerPage * currentPage + i));
+            }
         }
     }
 

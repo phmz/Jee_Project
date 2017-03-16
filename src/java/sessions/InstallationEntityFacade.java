@@ -34,7 +34,7 @@ public class InstallationEntityFacade extends AbstractFacade<InstallationEntity>
     public List<InstallationEntity> search(String tags, String departementLib, String cityLib){
         String queryString = "SELECT i.* FROM Installation i "
                              +"NATURAL JOIN Commune c NATURAL JOIN Departement d "
-                             +"WHERE c.ComLib = '"+cityLib+"'"; 
+                             +"WHERE c.ComInsee = '"+cityLib+"'"; 
         if(!(cityLib == null)){
             if(!("".equals(tags))){
                 queryString+=" AND "+tags;

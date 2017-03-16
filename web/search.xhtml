@@ -80,8 +80,8 @@
                     </div>
                 </div>  
 
-                <section class="col-xs-12 col-sm-6 col-md-12">
-                    <ui:repeat id="uirepeat" var="installation" value="#{requestBean.currentInstallationList}" size="5" varStatus="loop">
+                <section class="col-xs-12 col-sm-6 col-md-12" id="section">
+                    <ui:repeat id="uirepeat" var="installation" value="#{requestBean.currentInstallationList}" varStatus="loop">
 
                         <article id="articleresult" class="search-result row">
                             <div class="col-xs-12 col-sm-12 col-md-3" id="map">
