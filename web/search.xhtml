@@ -3,9 +3,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
     <h:head>
-        <title>login</title>
+        <title>Search Installation</title>
         <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
         <link href = "//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel = "stylesheet"></link>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
@@ -45,7 +46,7 @@
                     </h:selectOneMenu>
                 </div>
             </div>
-            
+
             <div class="form-group">
                 <label class="col-xs-3 control-label">City</label>
                 <div class="dropdown col-xs-8">
@@ -55,52 +56,66 @@
                     </h:selectOneMenu>
                 </div>
             </div>
-            <br></br>
-            <br></br>
-            <div class="form-group">
-                <div class="col-xs-1 col-xs-offset-3">
-                    <p:commandButton update="datatable" class="form-control btn btn-search" actionListener="#{requestBean.addTagToRequest()}" value="Search" type="submit">
-                     <f:ajax render="formId"/>
+            <div class="form-group" id="btn-div-div">
+                <div class="col-xs-1 col-xs-offset-3" id="btn-div">
+                    <p:commandButton update="@form" class="form-control btn btn-search" actionListener="#{requestBean.addTagToRequest()}" value="Search" type="submit">
                     </p:commandButton>
-                                    
                 </div>
-            </div>
-            
-            <p:dataTable id="datatable" var="install" value="#{requestBean.installationList}" rows="10"
-                         paginator="true"
-                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                         rowsPerPageTemplate="5,10,15"
-                         widgetVar="datatable">
-                <f:facet name="header">                    
-                    <p:outputPanel>
-                    <h:outputText value="Search all fields:" />
-                        <p:inputText id="globalFilter" onkeyup="PF('datatable').filter()" style="width:150px" placeholder="Enter keyword"/>
-                    </p:outputPanel>
-                </f:facet>
-                <p:column headerText="Nom" filterBy="#{install.insNom}" sortBy="#{install.insNom}" filterMatchMode="contains">
-                    <h:outputText value="#{install.insNom}" />
-                </p:column>
-                
-                <p:column headerText="Voie" filterBy="#{install.insLibelleVoie}" sortBy="#{install.insLibelleVoie}" filterMatchMode="contains">
-                    <h:outputText value="#{install.insNoVoie} #{install.insLibelleVoie}" />
-                </p:column>
-                
-                <p:column headerText="Code Postal" filterBy="#{install.insCodePostal}" sortBy="#{install.insCodePostal}" filterMatchMode="contains">
-                    <h:outputText value="#{install.insCodePostal}" />
-                </p:column>
-                
-                <p:column headerText="Commune" filterBy="#{install.comInsee.comLib}" sortBy="#{install.comInsee.comLib}" filterMatchMode="contains">
-                    <h:outputText value="#{install.comInsee.comLib}" />
-                </p:column>
- 
-                <!--<p:column headerText="Place de parking" filterBy="#{install.insNbPlaceParking}" sortBy="#{install.insNbPlaceParking}" filterMatchMode="contains">
-                    <h:outputText value="#{install.insNbPlaceParking}" />
-                </p:column>-->
+            </div>    
+            <div class="container" id="resultdiv">
 
-            </p:dataTable>                       
-        </h:form>
+                <hgroup class="mb20">
+                    <h1>Search Results</h1>
+                    <h2 class="lead"><strong class="text-danger">#{requestBean.installationList.size()}</strong> results were found for the search with <strong class="text-danger">#{requestBean.tags}</strong></h2>								
+
+                </hgroup>
+                <div class="form-group" id="btn-div-div">
+                    <div class="col-xs-1 col-xs-offset-2" id="btn-div">
+                        <p:commandButton update="@form" class="form-control btn btn-search" actionListener="#{requestBean.prevPage()}" value="Prev" type="submit">
+                        </p:commandButton>
+                    </div>
+                    <div class="col-xs-1 col-xs-offset-6" id="btn-div">
+                        <p:commandButton update="@form" class="form-control btn btn-search" actionListener="#{requestBean.nextPage()}" value="Next" type="submit">
+                        </p:commandButton>
+                    </div>
+                </div>  
+
+                <section class="col-xs-12 col-sm-6 col-md-12">
+                    <ui:repeat id="uirepeat" var="installation" value="#{requestBean.currentInstallationList}" size="5" varStatus="loop">
+
+                        <article id="articleresult" class="search-result row">
+                            <div class="col-xs-12 col-sm-12 col-md-3" id="map">
+                                <iframe width="250" height="140" frameborder="1" style="border:0" class="thumbnail" src="#{requestBean.getInstallationGoogleUrl(installation)}"></iframe>
+                            </div>
+                            <div class="col-xs-12 col-sm-12 col-md-2">
+                                <ul class="meta-search">
+                                    <li><span>Ratings</span></li>
+                                    <li><div class='starrr' id='star1'></div></li>
+                                    <li><br/></li>
+                                </ul>
+                            </div>
+                            <div class="col-xs-12 col-sm-12 col-md-7 excerpet">
+                                <h3><a href="#" title="">#{installation.insNom}</a></h3>
+                                <p>Small description #{loop.index}, address = #{requestBean.getInstallationAddress(installation)}</p>						
+                                <span class="plus"><a href="#" title="Lorem ipsum"><i class="glyphicon glyphicon-plus"></i></a></span>
+                            </div>
+                            <span class="clearfix borda"></span>
+                        </article>
+
+                    </ui:repeat>
+                </section>
+            </div>
+        </h:form>      
         <link rel="stylesheet" type="text/css" href="resources/css/search.css"></link>
-        <h:outputStylesheet library="css" name="search.css"  />                               
+        <link rel="stylesheet" type="text/css" href="resources/css/star.css"></link>
+
+        <script src="bootstrap/js/search.js"></script>
+        <script src="bootstrap/js/changepage.js"></script>   
+        <script type="text/javascript">
+                $('#star1').starrr({
+                    rating: 4
+                });
+        </script>
     </h:body>
 
 
