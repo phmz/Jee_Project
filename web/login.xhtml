@@ -6,6 +6,7 @@
       xmlns:jsf="http://xmlns.jcp.org/jsf"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
+        <f:event listener="#{userBean.checkLoginAccess()}" type="preRenderView"/>
         <title>login</title>
         <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
         <link href = "//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel = "stylesheet"></link>
@@ -33,14 +34,14 @@
                                     <h:form id="login-form" role="form" style="display: block;">
                                         <div jsf:id="login-fields">
                                             <div class="form-group">
-                                                <p:inputText id="register-email" styleClass="form-control" type="email" value="#{userBean.user.email}" placeholder="Email Address" required="true" requiredMessage="The email field is required." validatorMessage="Invalid email format">
+                                                <p:inputText id="login-email" styleClass="form-control" type="email" value="#{userBean.email}" placeholder="Email Address" required="true" requiredMessage="The email field is required." validatorMessage="Invalid email format">
                                                     <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
                                                 </p:inputText>
-                                                <p:message for="register-email" display="text" />
+                                                <p:message for="login-email" display="text" />
                                             </div>
                                             <div class="form-group">
-                                                <p:inputText id="register-password" styleClass="form-control" type="password" value="#{userBean.user.password}" placeholder="Password" required="true" requiredMessage="The password field is required."/>
-                                                <p:message for="register-password" display="text" />
+                                                <p:inputText id="login-password" styleClass="form-control" type="password" value="#{userBean.password}" placeholder="Password" required="true" requiredMessage="The password field is required."/>
+                                                <p:message for="login-password" display="text" />
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -56,18 +57,18 @@
                                     <h:form id="register-form" role="form" style="display: none;">
                                         <div jsf:id="register-fields">
                                             <div class="form-group">
-                                                <p:inputText id="register-email" styleClass="form-control" type="email" value="#{userBean.user.email}" placeholder="Email Address" required="true" requiredMessage="The email field is required." validatorMessage="Invalid email format">
+                                                <p:inputText id="register-email" styleClass="form-control" type="email" value="#{userBean.email}" placeholder="Email Address" required="true" requiredMessage="The email field is required." validatorMessage="Invalid email format">
                                                     <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
                                                 </p:inputText>
 
                                                 <p:message for="register-email" display="text" />
                                             </div>
                                             <div class="form-group">
-                                                <p:password id="register-password" styleClass="form-control" value="#{userBean.user.password}" placeholder="Password" match="register-confirm" required="true" requiredMessage="The password field is required" validatorMessage="The password confirmation does not match."/>
+                                                <p:password id="register-password" styleClass="form-control" value="#{userBean.password}" placeholder="Password" match="register-confirm" required="true" requiredMessage="The password field is required" validatorMessage="The password confirmation does not match."/>
                                                 <p:message for="register-password" display="text" />
                                             </div>
                                             <div class="form-group">
-                                                <p:password id="register-confirm" styleClass="form-control" value="#{userBean.user.password}" placeholder="Confirm Password" required="true" requiredMessage="The password field is required."/>
+                                                <p:password id="register-confirm" styleClass="form-control" value="#{userBean.password}" placeholder="Confirm Password" required="true" requiredMessage="The password field is required."/>
                                                 <p:message for="register-confirm" display="text" />
                                             </div>
                                         </div>

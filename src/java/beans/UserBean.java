@@ -14,6 +14,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.context.FacesContext;
 import sessions.UserEntityFacade;
 
@@ -30,6 +31,12 @@ public class UserBean implements Serializable {
 
     private UserEntity user;
 
+    private boolean isUserLogin = false;
+
+    private String email;
+
+    private String password;
+
     /**
      * Creates a new instance of UserBean
      */
@@ -45,21 +52,49 @@ public class UserBean implements Serializable {
         this.user = user;
     }
 
+    public boolean isIsUserLogin() {
+        return isUserLogin;
+    }
+
+    public void setIsUserLogin(boolean isUserLogin) {
+        this.isUserLogin = isUserLogin;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public void register() {
         System.out.println("REGISTER BEGIN");
-        UserEntity user = facade.findUser(this.user);
-        if (user == null) {
-            // We did not find the user in the db
-            String password = digestPassword(this.user.getPassword());
-            if (password == null) {
-                // Could not digest password
+        this.user = new UserEntity(email, password);
+        UserEntity userTmp = facade.findUser(this.user);
+        if (userTmp == null) {
+            // We did not find the userTmp in the db
+            String passwordDigested = digestPassword(this.user.getPassword());
+            if (passwordDigested == null) {
+                // Could not digest passwordDigested
                 System.out.println("REGISTER FAILED DIGEST FAILED");
                 // DO SOMETHING
                 return;
             }
-            this.user = new UserEntity(this.user.getEmail(), password);
+            this.user = new UserEntity(this.user.getEmail(), passwordDigested);
             if (facade.registerUser(this.user)) {
                 System.out.println("REGISTER SUCCESS");
+                password = passwordDigested;
+                isUserLogin = true;
+                goToSearch();
                 // DO SOMETHING
             } else {
                 System.out.println("REGISTER FAILED");
@@ -73,22 +108,25 @@ public class UserBean implements Serializable {
 
     public void login() {
         System.out.println("LOGIN BEGIN");
-        UserEntity user = facade.findUser(this.user);
-        if (user == null) {
-            // We did not find the user in the db
+        this.user = new UserEntity(email, password);
+        UserEntity userTmp = facade.findUser(this.user);
+        if (userTmp == null) {
+            // We did not find the userTmp in the db
             System.out.println("LOGIN FAILED USER DOES NOT EXIST");
             // DO SOMETHING
         } else {
-            String password = digestPassword(this.user.getPassword());
-            if (password == null) {
-                // Could not digest password
+            String passwordDigested = digestPassword(this.user.getPassword());
+            if (passwordDigested == null) {
+                // Could not digest passwordDigested
                 System.out.println("LOGIN FAILED DIGEST FAILED");
                 // DO SOMETHING
                 return;
             }
-            this.user = new UserEntity(this.user.getEmail(), password);
-            if (this.user.getPassword().equals(user.getPassword())) {
+            this.user = new UserEntity(this.user.getEmail(), passwordDigested);
+            if (this.user.getPassword().equals(userTmp.getPassword())) {
                 System.out.println("LOGIN SUCCESS");
+                password = passwordDigested;
+                isUserLogin = true;
                 // DO SOMETHING
                 goToSearch();
             } else {
@@ -96,6 +134,16 @@ public class UserBean implements Serializable {
                 // DO SOMETHING
             }
         }
+    }
+
+    public void logout() {
+        System.out.println("LOGOUT BEGIN");
+        user = null;
+        email = "";
+        password = "";
+        isUserLogin = false;        
+        goToLogin();
+        System.out.println("LOGOUT SUCCESS");
     }
 
     private String digestPassword(String password) {
@@ -110,9 +158,37 @@ public class UserBean implements Serializable {
         return null;
     }
 
-    private void goToSearch() {
+    public void goToSearch() {
+        if (!isUserLogin) {
+            return;
+        }
         FacesContext context = FacesContext.getCurrentInstance();
         context.getApplication().getNavigationHandler().handleNavigation(context, null, "/search.xhtml?faces-redirect=true");
+    }
+
+    private void goToLogin() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.getApplication().getNavigationHandler().handleNavigation(context, null, "/login.xhtml?faces-redirect=true");
+    }
+    
+    public void goToHistory() {
+        if(!isUserLogin) {
+            return;
+        }
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.getApplication().getNavigationHandler().handleNavigation(context, null, "/history.xhtml?faces-redirect=true");
+    }
+    
+    public void checkLoginAccess() {
+        if(isUserLogin) {
+            goToSearch();
+        }
+    }
+    
+    public void checkOtherAccess() {
+         if(!isUserLogin) {
+            goToLogin();
+        }
     }
 
 }

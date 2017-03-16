@@ -6,6 +6,7 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
     <h:head>
+        <f:event listener="#{userBean.checkOtherAccess()}" type="preRenderView"/>
         <title>Search Installation</title>
         <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
         <link href = "//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel = "stylesheet" type="text/css" ></link>
@@ -17,10 +18,6 @@
     <h:body>
         <ui:include src="/WEB-INF/header.xhtml"/>
         <h:form id="tags-form" class="form-horizontal">
-
-
-
-
             <br/>
             <div class="form-group">
                 <label class="col-xs-3 control-label">Keywords</label>

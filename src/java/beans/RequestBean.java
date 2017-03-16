@@ -12,7 +12,6 @@ import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.ManagedBean;
@@ -271,5 +270,15 @@ public class RequestBean implements Serializable {
 
     private void updateDataTable() {
         RequestContext.getCurrentInstance().update("tags-form:section");
+    }
+
+    public void reset() {
+        installationList.clear();
+        currentInstallationList.clear();
+        tags = "";
+        showSearch = false;
+        city = "";
+        department = "";
+        currentPage = 0;
     }
 }
