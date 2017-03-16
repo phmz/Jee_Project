@@ -8,14 +8,19 @@
     <h:head>
         <title>Search Installation</title>
         <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
-        <link href = "//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel = "stylesheet"></link>
+        <link href = "//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel = "stylesheet" type="text/css" ></link>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="//cdn.jsdelivr.net/bootstrap.tagsinput/0.4.2/bootstrap-tagsinput.css" />
         <script src="//cdn.jsdelivr.net/bootstrap.tagsinput/0.4.2/bootstrap-tagsinput.min.js"></script>
         <script src="bootstrap/js/typeahead.bundle.js"></script>
     </h:head>
     <h:body>
+        <ui:include src="/WEB-INF/header.xhtml"/>
         <h:form id="tags-form" class="form-horizontal">
+
+
+
+
             <br/>
             <div class="form-group">
                 <label class="col-xs-3 control-label">Keywords</label>
@@ -58,54 +63,59 @@
             </div>
             <div class="form-group" id="btn-div-div">
                 <div class="col-xs-1 col-xs-offset-3" id="btn-div">
-                    <p:commandButton update="@form" class="form-control btn btn-search" actionListener="#{requestBean.addTagToRequest()}" value="Search" type="submit">
+                    <p:commandButton update="tags-form:resultdiv" class="form-control btn btn-search" actionListener="#{requestBean.addTagToRequest()}" value="Search" type="submit">
+                        <f:ajax render="tags-form:hiddenSearchDiv"/>
                     </p:commandButton>
                 </div>
             </div>    
-            <div class="container" id="resultdiv">
+            <h:panelGroup layout="block" class="container container-mrg" id="resultdiv">
+                <h:panelGroup layout="block" id="hiddenSearchDiv" rendered="#{requestBean.showSearch}">
+                    <div id="searchresult-div" >
+                        <hgroup class="mb20">
+                            <h1>Search Results</h1>
+                            <h2 class="lead"><strong class="text-danger">#{requestBean.installationList.size()}</strong> results were found for the search with <strong class="text-danger">#{requestBean.tags}</strong></h2>								
 
-                <hgroup class="mb20">
-                    <h1>Search Results</h1>
-                    <h2 class="lead"><strong class="text-danger">#{requestBean.installationList.size()}</strong> results were found for the search with <strong class="text-danger">#{requestBean.tags}</strong></h2>								
-
-                </hgroup>
-                <div class="form-group" id="btn-div-div">
-                    <div class="col-xs-1 col-xs-offset-2" id="btn-div">
-                        <p:commandButton update="@form" class="form-control btn btn-search" actionListener="#{requestBean.prevPage()}" value="Prev" type="submit">
-                        </p:commandButton>
+                        </hgroup>
+                        <div class="form-group" id="btn-div-div">
+                            <div class="col-xs-1 col-xs-offset-2" id="btn-div">
+                                <p:commandButton class="form-control btn btn-search" actionListener="#{requestBean.prevPage()}" value="Prev" type="submit">
+                                </p:commandButton>
+                            </div>
+                            <div class="col-xs-1 col-xs-offset-6" id="btn-div">
+                                <p:commandButton class="form-control btn btn-search" actionListener="#{requestBean.nextPage()}" value="Next" type="submit">
+                                </p:commandButton>
+                            </div>
+                        </div>  
                     </div>
-                    <div class="col-xs-1 col-xs-offset-6" id="btn-div">
-                        <p:commandButton update="@form" class="form-control btn btn-search" actionListener="#{requestBean.nextPage()}" value="Next" type="submit">
-                        </p:commandButton>
-                    </div>
-                </div>  
 
-                <section class="col-xs-12 col-sm-6 col-md-12" id="section">
-                    <ui:repeat id="uirepeat" var="installation" value="#{requestBean.currentInstallationList}" varStatus="loop">
+                    <h:panelGroup layout="block" class="col-xs-12 col-sm-6 col-md-12" id="section">
+                        <ui:repeat id="uirepeat" var="installation" value="#{requestBean.currentInstallationList}" varStatus="loop">
 
-                        <article id="articleresult" class="search-result row">
-                            <div class="col-xs-12 col-sm-12 col-md-3" id="map">
-                                <iframe width="250" height="140" frameborder="1" style="border:0" class="thumbnail" src="#{requestBean.getInstallationGoogleUrl(installation)}"></iframe>
-                            </div>
-                            <div class="col-xs-12 col-sm-12 col-md-2">
-                                <ul class="meta-search">
-                                    <li><span>Ratings</span></li>
-                                    <li><div class='starrr' id='star1'></div></li>
-                                    <li><br/></li>
-                                </ul>
-                            </div>
-                            <div class="col-xs-12 col-sm-12 col-md-7 excerpet">
-                                <h3><a href="#" title="">#{installation.insNom}</a></h3>
-                                <p>Small description #{loop.index}, address = #{requestBean.getInstallationAddress(installation)}</p>						
-                                <span class="plus"><a href="#" title="Lorem ipsum"><i class="glyphicon glyphicon-plus"></i></a></span>
-                            </div>
-                            <span class="clearfix borda"></span>
-                        </article>
+                            <article id="articleresult" class="search-result row">
+                                <div class="col-xs-12 col-sm-12 col-md-3" id="map">
+                                    <iframe width="250" height="140" frameborder="1" style="border:0" class="thumbnail" src="#{requestBean.getInstallationGoogleUrl(installation)}"></iframe>
+                                </div>
+                                <div class="col-xs-12 col-sm-12 col-md-2">
+                                    <ul class="meta-search">
+                                        <li><span>Ratings</span></li>
+                                        <li><div class='starrr' id='star1'></div></li>
+                                        <li><br/></li>
+                                    </ul>
+                                </div>
+                                <div class="col-xs-12 col-sm-12 col-md-7 excerpet">
+                                    <h3><a href="#" title="">#{installation.insNom}</a></h3>
+                                    <p>Small description #{loop.index}, address = #{requestBean.getInstallationAddress(installation)}</p>						
+                                    <span class="plus"><a href="#" title="Lorem ipsum"><i class="glyphicon glyphicon-plus"></i></a></span>
+                                </div>
+                                <span class="clearfix borda"></span>
+                            </article>
 
-                    </ui:repeat>
-                </section>
-            </div>
-        </h:form>      
+                        </ui:repeat>
+                    </h:panelGroup>
+                </h:panelGroup>
+            </h:panelGroup>
+        </h:form>   
+        <link rel="stylesheet" type="text/css" href="resources/css/navbar.css"></link>
         <link rel="stylesheet" type="text/css" href="resources/css/search.css"></link>
         <link rel="stylesheet" type="text/css" href="resources/css/star.css"></link>
 

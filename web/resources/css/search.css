@@ -50,14 +50,9 @@
     background-color: white;
 }
 
-body{
-    margin-top:20px;
-    background-color: #eee;
-}
-
 @import url("http://fonts.googleapis.com/css?family=Roboto:300,400,500,700");
 
-.container { margin-top: 20px; }
+.container-mrg { margin-top: 20px; }
 .mb20 { margin-bottom: 20px; } 
 
 hgroup { padding-left: 15px; border-bottom: 1px solid #ccc; }

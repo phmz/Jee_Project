@@ -18,6 +18,7 @@ import java.util.Map;
 import javax.annotation.ManagedBean;
 import javax.ejb.EJB;
 import javax.faces.context.FacesContext;
+import org.primefaces.context.RequestContext;
 import sessions.CommuneEntityFacade;
 import sessions.InstallationEntityFacade;
 import sessions.RequestEntityFacade;
@@ -59,6 +60,16 @@ public class RequestBean implements Serializable {
     private int elementPerPage = 5;
 
     private String tags;
+
+    private boolean showSearch = false;
+
+    public boolean isShowSearch() {
+        return showSearch;
+    }
+
+    public void setShowSearch(boolean showSearch) {
+        this.showSearch = showSearch;
+    }
 
     public String getTags() {
         return tags;
@@ -107,16 +118,6 @@ public class RequestBean implements Serializable {
         request = new RequestEntity();
     }
 
-    public List<String> completeText() {
-        String query = "a";
-        List<String> results = new ArrayList<String>();
-        for (int i = 0; i < 10; i++) {
-            results.add(query + i);
-        }
-
-        return results;
-    }
-
     public String getDepartment() {
         return department;
     }
@@ -158,6 +159,7 @@ public class RequestBean implements Serializable {
     }
 
     public void addTagToRequest() {
+        showSearch = true;
         String tag = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("tags-form:keywords");
         if (tag.isEmpty()) {
             installationList = installfacade.search("", department, city);
@@ -200,7 +202,7 @@ public class RequestBean implements Serializable {
 
     public void nextPage() {
         System.out.println("Getting next page");
-        if ((currentPage+1) * elementPerPage > installationList.size()) {
+        if ((currentPage + 1) * elementPerPage > installationList.size()) {
             return;
         }
         currentInstallationList.clear();
@@ -211,6 +213,7 @@ public class RequestBean implements Serializable {
                 currentInstallationList.add(installationList.get(elementPerPage * currentPage + i));
             }
         }
+        updateDataTable();
     }
 
     public void prevPage() {
@@ -226,6 +229,7 @@ public class RequestBean implements Serializable {
                 currentInstallationList.add(installationList.get(elementPerPage * currentPage + i));
             }
         }
+        updateDataTable();
     }
 
     private void initCurrentList() {
@@ -238,6 +242,9 @@ public class RequestBean implements Serializable {
                 currentInstallationList.add(installationList.get(elementPerPage * currentPage + i));
             }
         }
+        System.out.println("showResult "+showSearch);
+        RequestContext.getCurrentInstance().update("tags-form:resultdiv");
+        updateDataTable();
     }
 
     public String getInstallationAddress(InstallationEntity installation) {
@@ -260,5 +267,9 @@ public class RequestBean implements Serializable {
     public String getInstallationGoogleUrl(InstallationEntity installation) {
         String address = getInstallationAddress(installation).replace(" ", "+");
         return "https://www.google.com/maps/embed/v1/place?key=AIzaSyDQp7RamUbJjbyVmtpWomeTDpIcycDU1aQ&q=" + address;
+    }
+
+    private void updateDataTable() {
+        RequestContext.getCurrentInstance().update("tags-form:section");
     }
 }
