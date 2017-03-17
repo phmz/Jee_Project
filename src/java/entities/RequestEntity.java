@@ -10,6 +10,8 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -27,7 +29,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "RequestEntity.findAll", query = "SELECT r FROM RequestEntity r")
     , @NamedQuery(name = "RequestEntity.findByIdrequest", query = "SELECT r FROM RequestEntity r WHERE r.idrequest = :idrequest")
-    , @NamedQuery(name = "RequestEntity.findByRequestLib", query = "SELECT r FROM RequestEntity r WHERE r.requestLib = :requestLib")})
+    , @NamedQuery(name = "RequestEntity.findByDepLib", query = "SELECT r FROM RequestEntity r WHERE r.depLib = :depLib")
+    , @NamedQuery(name = "RequestEntity.findByComInsee", query = "SELECT r FROM RequestEntity r WHERE r.comInsee = :comInsee")
+    , @NamedQuery(name = "RequestEntity.findByTagsList", query = "SELECT r FROM RequestEntity r WHERE r.tagsList = :tagsList")})
 public class RequestEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -38,9 +42,18 @@ public class RequestEntity implements Serializable {
     private Integer idrequest;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 1000)
-    @Column(name = "requestLib")
-    private String requestLib;
+    @Size(min = 1, max = 40)
+    @Column(name = "depLib")
+    private String depLib;
+    @Size(max = 45)
+    @Column(name = "comInsee")
+    private String comInsee;
+    @Size(max = 500)
+    @Column(name = "tagsList")
+    private String tagsList;
+    @JoinColumn(name = "email", referencedColumnName = "email")
+    @ManyToOne(optional = false)
+    private UserEntity user;
 
     public RequestEntity() {
     }
@@ -49,9 +62,9 @@ public class RequestEntity implements Serializable {
         this.idrequest = idrequest;
     }
 
-    public RequestEntity(Integer idrequest, String requestLib) {
+    public RequestEntity(Integer idrequest, String depLib) {
         this.idrequest = idrequest;
-        this.requestLib = requestLib;
+        this.depLib = depLib;
     }
 
     public Integer getIdrequest() {
@@ -62,13 +75,39 @@ public class RequestEntity implements Serializable {
         this.idrequest = idrequest;
     }
 
-    public String getRequestLib() {
-        return requestLib;
+    public String getDepLib() {
+        return depLib;
     }
 
-    public void setRequestLib(String requestLib) {
-        this.requestLib = requestLib;
+    public void setDepLib(String depLib) {
+        this.depLib = depLib;
     }
+
+    public String getComInsee() {
+        return comInsee;
+    }
+
+    public void setComInsee(String comInsee) {
+        this.comInsee = comInsee;
+    }
+
+    public String getTagsList() {
+        return tagsList;
+    }
+
+    public void setTagsList(String tagsList) {
+        this.tagsList = tagsList;
+    }
+
+    public UserEntity getUser() {
+        return user;
+    }
+
+    public void setUser(UserEntity user) {
+        this.user = user;
+    }
+    
+    
 
     @Override
     public int hashCode() {

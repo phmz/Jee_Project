@@ -60,7 +60,7 @@
             </div>
             <div class="form-group" id="btn-div-div">
                 <div class="col-xs-1 col-xs-offset-3" id="btn-div">
-                    <p:commandButton update="tags-form:resultdiv" class="form-control btn btn-search" actionListener="#{requestBean.addTagToRequest()}" value="Search" type="submit">
+                    <p:commandButton update="tags-form:resultdiv" class="form-control btn btn-search" actionListener="#{requestBean.addTagToRequest(userBean.user)}" value="Search" type="submit">
                         <f:ajax render="tags-form:hiddenSearchDiv"/>
                     </p:commandButton>
                 </div>

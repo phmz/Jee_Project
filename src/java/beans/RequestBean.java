@@ -7,6 +7,7 @@ package beans;
 
 import entities.InstallationEntity;
 import entities.RequestEntity;
+import entities.UserEntity;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
@@ -157,15 +158,17 @@ public class RequestBean implements Serializable {
         this.citys = citys;
     }
 
-    public void addTagToRequest() {
+    public void addTagToRequest(UserEntity user) {
         showSearch = true;
         String tag = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("tags-form:keywords");
-        if (tag.isEmpty()) {
-            installationList = installfacade.search("", department, city);
-            initCurrentList();
+        System.out.println("TAG= " + tag);
+        System.out.println(tag.isEmpty() + " " + (tag == null));
+        if (tag.isEmpty() || tag == null) {
+            launchRequest("", user);
             tags = "no tag";
             return;
         }
+        System.out.println("HERE IM HERE");
         String tagsArray[] = tag.split(",");
         HashMap<String, String> tagsMap = fillTagsMap();
         StringBuilder sb = new StringBuilder();
@@ -177,7 +180,28 @@ public class RequestBean implements Serializable {
             }
         }
         tags = tag.replace(",", ", ");
-        installationList = installfacade.search(sb.toString(), department, city);
+        launchRequest(sb.toString(), user);
+    }
+
+    private void launchRequest(String tag, UserEntity user) {
+        installationList = installfacade.search(tag, department, city);
+        request.setDepLib(department);
+        if (city != null) {
+            request.setComInsee(city);
+        } else {
+            request.setComInsee("");
+        }
+        request.setUser(user);
+        if (tag.isEmpty()) {
+            request.setTagsList("");
+
+        } else {
+            request.setTagsList(tags);
+
+        }
+        if (facade.addRequest(request)) {
+            // DO SOMETHING
+        }
         initCurrentList();
     }
 
@@ -241,7 +265,7 @@ public class RequestBean implements Serializable {
                 currentInstallationList.add(installationList.get(elementPerPage * currentPage + i));
             }
         }
-        System.out.println("showResult "+showSearch);
+        System.out.println("showResult " + showSearch);
         RequestContext.getCurrentInstance().update("tags-form:resultdiv");
         updateDataTable();
     }
@@ -249,7 +273,10 @@ public class RequestBean implements Serializable {
     public String getInstallationAddress(InstallationEntity installation) {
         StringBuilder sb = new StringBuilder();
         if (installation.getInsNoVoie() != null) {
-            sb.append(installation.getInsNoVoie());
+            // Only keep the first number
+            // e.g. 20-22 will be 20 
+            String noVoie = installation.getInsNoVoie().split("-")[0];
+            sb.append(noVoie);
         }
         if (installation.getInsLibelleVoie() != null) {
             sb.append(" ").append(installation.getInsLibelleVoie());
