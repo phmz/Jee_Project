@@ -28,6 +28,7 @@
                             <li><a href="#">#{userBean.email}</a></li>
                             <li>
                                 <h:commandLink actionListener="#{userBean.goToHistory()}">
+                                    <f:actionListener binding="#{requestBean.fillHistory(userBean.user)}"/>
                                     <h:outputText value="History" />
                                 </h:commandLink>
                             </li>

@@ -5,7 +5,10 @@
  */
 package sessions;
 
+import entities.CommuneEntity;
 import entities.RequestEntity;
+import entities.UserEntity;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -35,7 +38,14 @@ public class RequestEntityFacade extends AbstractFacade<RequestEntity> {
         Query query = em.createNativeQuery(queryString, RequestEntity.class);
         int size = query.getResultList().size();
         RequestEntity tmp = new RequestEntity(size, request.getDepLib());
-        tmp.setComInsee(request.getComInsee());
+        if(request.getComInsee() == null || request.getComInsee().isEmpty()) {
+            tmp.setComInsee("");
+        } else {
+            String queryCityLib = "SELECT c.* FROM Commune c WHERE c.comInsee = '"+request.getComInsee()+"'";
+            query = em.createNativeQuery(queryCityLib, CommuneEntity.class);
+            List<CommuneEntity> communeList = query.getResultList();
+            tmp.setComInsee(communeList.get(0).getComLib());
+        }
         tmp.setTagsList(request.getTagsList());
         tmp.setUser(request.getUser());
         StringBuilder sb = new StringBuilder();
@@ -54,6 +64,12 @@ public class RequestEntityFacade extends AbstractFacade<RequestEntity> {
             return true;
         }
         return false;
+    }
+
+    public List<RequestEntity> searchUserHistory(UserEntity user) {
+        String queryString = "SELECT r.* FROM Request r WHERE r.email = '" + user.getEmail() + "'";
+        Query query = em.createNativeQuery(queryString, RequestEntity.class);
+        return query.getResultList();
     }
 
 }

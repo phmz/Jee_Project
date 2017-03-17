@@ -63,6 +63,8 @@ public class RequestBean implements Serializable {
 
     private boolean showSearch = false;
 
+    private List<RequestEntity> requestHistory;
+
     public boolean isShowSearch() {
         return showSearch;
     }
@@ -158,6 +160,14 @@ public class RequestBean implements Serializable {
         this.citys = citys;
     }
 
+    public List<RequestEntity> getRequestHistory() {
+        return requestHistory;
+    }
+
+    public void setRequestHistory(List<RequestEntity> requestHistory) {
+        this.requestHistory = requestHistory;
+    }
+
     public void addTagToRequest(UserEntity user) {
         showSearch = true;
         String tag = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("tags-form:keywords");
@@ -186,18 +196,12 @@ public class RequestBean implements Serializable {
     private void launchRequest(String tag, UserEntity user) {
         installationList = installfacade.search(tag, department, city);
         request.setDepLib(department);
-        if (city != null) {
-            request.setComInsee(city);
-        } else {
-            request.setComInsee("");
-        }
+        request.setComInsee(city);
         request.setUser(user);
         if (tag.isEmpty()) {
             request.setTagsList("");
-
         } else {
             request.setTagsList(tags);
-
         }
         if (facade.addRequest(request)) {
             // DO SOMETHING
@@ -307,5 +311,11 @@ public class RequestBean implements Serializable {
         city = "";
         department = "";
         currentPage = 0;
+    }
+
+    public void fillHistory(UserEntity user) {
+        System.out.println("Filling history");
+        requestHistory = facade.searchUserHistory(user);
+        System.out.println("requestHistory size " + requestHistory.size());
     }
 }
