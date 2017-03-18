@@ -84,7 +84,16 @@
                                 <div class="col-xs-12 col-sm-12 col-md-2">
                                     <ul class="meta-search">
                                         <li><span>Ratings</span></li>
-                                        <li><div class='starrr' id='star1'></div></li>
+                                        <li><br/></li>
+                                        <li><div class='starrr' id="star#{loop.index}"></div></li>
+                                        <script>
+                                            $(function () {
+                                                $('#star#{loop.index}').starrr({
+                                                    rating: #{notecommentBean.printNote(installation.insNumeroInstall)},
+                                                    readOnly: true
+                                                });
+                                            });
+                                        </script>
                                         <li><br/></li>
                                     </ul>
                                 </div>
@@ -107,11 +116,6 @@
 
         <script src="bootstrap/js/search.js"></script>
         <script src="bootstrap/js/changepage.js"></script>   
-        <script type="text/javascript">
-            $('#star1').starrr({
-                rating: 4
-            });
-        </script>
         <script>
             var tags = #{requestBean.possibleTags};
             $('.tagsinput-typeahead').tagsinput({
@@ -124,11 +128,7 @@
                     }
                 }
             });
-
-
-
             $(function () {
-                console.log("yo");
                 var url = window.location.href;
                 var tokens = url.split("?");
                 if (tokens.length > 1) {
