@@ -38,16 +38,18 @@
                                                     <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
                                                 </p:inputText>
                                                 <p:message for="login-email" display="text" />
+                                                <p:messages showDetail="true" showIcon="false" showSummary="false" autoUpdate="true"></p:messages>
                                             </div>
                                             <div class="form-group">
                                                 <p:inputText id="login-password" styleClass="form-control" type="password" value="#{userBean.password}" placeholder="Password" required="true" requiredMessage="The password field is required."/>
                                                 <p:message for="login-password" display="text" />
+                                                <p:messages showDetail="true" showIcon="false" showSummary="false" autoUpdate="true"></p:messages>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <div class="row">
                                                 <div class="col-sm-6 col-sm-offset-3">
-                                                    <p:commandButton actionListener="#{userBean.login()}" value="Log In" class="form-control btn btn-login" type="submit" update="login-fields" ajax="false"/>
+                                                    <p:commandButton actionListener="#{userBean.login()}" value="Log In" class="form-control btn btn-login" type="submit" update="login-fields"/>
                                                 </div>
                                             </div>
                                         </div>
