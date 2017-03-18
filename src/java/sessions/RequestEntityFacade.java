@@ -34,10 +34,8 @@ public class RequestEntityFacade extends AbstractFacade<RequestEntity> {
     }
 
     public boolean addRequest(RequestEntity request) {
-        String queryString = "SELECT r.* FROM Request r";
-        Query query = em.createNativeQuery(queryString, RequestEntity.class);
-        int size = query.getResultList().size();
-        RequestEntity tmp = new RequestEntity(size, request.getDepLib());
+        Query query;
+        RequestEntity tmp = new RequestEntity(0, request.getDepLib());
         if(request.getComInsee() == null || request.getComInsee().isEmpty()) {
             tmp.setComInsee("");
         } else {
