@@ -72,4 +72,11 @@ public class RequestEntityFacade extends AbstractFacade<RequestEntity> {
         return query.getResultList();
     }
 
+    public void deleteRequest(int id) {
+        RequestEntity request = em.find(RequestEntity.class, id);
+        if(request != null) {
+            em.remove(request);
+        }
+    }
+
 }

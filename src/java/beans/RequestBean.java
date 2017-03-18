@@ -172,13 +172,13 @@ public class RequestBean implements Serializable {
         showSearch = true;
         String tag = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("tags-form:keywords");
         System.out.println("TAG= " + tag);
-        System.out.println(tag.isEmpty() + " " + (tag == null));
-        if (tag.isEmpty() || tag == null) {
+        if (tag == null || tag.isEmpty()) {
             launchRequest("", user);
             tags = "no tag";
             return;
         }
         System.out.println("HERE IM HERE");
+        tag = tag.replace(", ", ",");
         String tagsArray[] = tag.split(",");
         HashMap<String, String> tagsMap = fillTagsMap();
         StringBuilder sb = new StringBuilder();
@@ -276,7 +276,7 @@ public class RequestBean implements Serializable {
 
     public String getInstallationAddress(InstallationEntity installation) {
         StringBuilder sb = new StringBuilder();
-        if (installation.getInsNoVoie() != null) {
+        if (installation.getInsNoVoie() != null && !installation.getInsNoVoie().isEmpty() && !installation.getInsNoVoie().equals("-")) {
             // Only keep the first number
             // e.g. 20-22 will be 20 
             String noVoie = installation.getInsNoVoie().split("-")[0];
@@ -316,6 +316,22 @@ public class RequestBean implements Serializable {
     public void fillHistory(UserEntity user) {
         System.out.println("Filling history");
         requestHistory = facade.searchUserHistory(user);
-        System.out.println("requestHistory size " + requestHistory.size());
+    }
+    
+    public void deleteRequest(int id, UserEntity user) {
+        facade.deleteRequest(id);
+        fillHistory(user);
+    }
+    
+    public void searchRequest(UserEntity user, String depLib, String cityLib, String tagsList) {
+        if (cityLib.isEmpty()) {
+            city = "";
+        } else {
+        city = cityfacade.getComInsee(cityLib);
+        }
+        department = depLib;
+        System.out.println("TAGSLIST "+tagsList);
+        tags = tagsList;
+        addTagToRequest(user);
     }
 }

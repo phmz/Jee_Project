@@ -31,27 +31,17 @@ public class InstallationEntityFacade extends AbstractFacade<InstallationEntity>
         super(InstallationEntity.class);
     }
     
-    public List<InstallationEntity> search(String tags, String departementLib, String cityLib){
-        String queryString = "SELECT i.* FROM Installation i "
-                             +"NATURAL JOIN Commune c NATURAL JOIN Departement d "
-                             +"WHERE c.ComInsee = '"+cityLib+"'"; 
-        if(!(cityLib == null)){
-            if(!("".equals(tags))){
-                queryString+=" AND "+tags;
-            }
-        } else{
-            queryString = "SELECT i.* FROM Installation i "
-                                           +"NATURAL JOIN Commune c NATURAL JOIN Departement d "
-                                           +"WHERE d.deplib = '" + departementLib+"'";
-        
-        
-            if(!("".equals(tags))){
-                queryString+=" AND "+tags;
-            }
+    public List<InstallationEntity> search(String tags, String departementLib, String comInsee){
+        StringBuilder sb = new StringBuilder();
+        sb.append("SELECT i.* FROM Installation i NATURAL JOIN Commune c NATURAL JOIN Departement d WHERE d.deplib = '").append(departementLib).append("'");
+        if (comInsee != null && !comInsee.isEmpty()) {
+            sb.append(" AND c.comInsee = '").append(comInsee).append("'");
         }
-        System.out.println(queryString);
-        Query query = em.createNativeQuery(queryString,InstallationEntity.class);
-        
+        if(tags != null && !tags.isEmpty()) {
+            sb.append(" AND ").append(tags);
+        }
+        System.out.println("INSTALLATION QUERY: "+sb.toString());
+        Query query = em.createNativeQuery(sb.toString(),InstallationEntity.class);
         List<InstallationEntity> array = query.getResultList();            
         return array;                
     }
