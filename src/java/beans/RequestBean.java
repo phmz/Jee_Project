@@ -18,6 +18,7 @@ import java.util.Map;
 import javax.annotation.ManagedBean;
 import javax.ejb.EJB;
 import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
 import org.primefaces.context.RequestContext;
 import sessions.CommuneEntityFacade;
 import sessions.InstallationEntityFacade;
@@ -170,14 +171,12 @@ public class RequestBean implements Serializable {
 
     public void addTagToRequest(UserEntity user) {
         showSearch = true;
-        String tag = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("tags-form:keywords");
-        System.out.println("TAG= " + tag);
+        String tag = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("keywords");
         if (tag == null || tag.isEmpty()) {
             launchRequest("", user);
             tags = "no tag";
             return;
         }
-        System.out.println("HERE IM HERE");
         tag = tag.replace(", ", ",");
         String tagsArray[] = tag.split(",");
         HashMap<String, String> tagsMap = fillTagsMap();
@@ -269,7 +268,6 @@ public class RequestBean implements Serializable {
                 currentInstallationList.add(installationList.get(elementPerPage * currentPage + i));
             }
         }
-        System.out.println("showResult " + showSearch);
         RequestContext.getCurrentInstance().update("tags-form:resultdiv");
         updateDataTable();
     }
@@ -317,21 +315,56 @@ public class RequestBean implements Serializable {
         System.out.println("Filling history");
         requestHistory = facade.searchUserHistory(user);
     }
-    
+
     public void deleteRequest(int id, UserEntity user) {
         facade.deleteRequest(id);
         fillHistory(user);
     }
-    
+
     public void searchRequest(UserEntity user, String depLib, String cityLib, String tagsList) {
+        department = depLib;
+        stateChangeListener();
         if (cityLib.isEmpty()) {
             city = "";
         } else {
-        city = cityfacade.getComInsee(cityLib);
+            city = cityfacade.getComInsee(cityLib, depLib);
         }
-        department = depLib;
-        System.out.println("TAGSLIST "+tagsList);
         tags = tagsList;
-        addTagToRequest(user);
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.getApplication().getNavigationHandler().handleNavigation(context, null, "/search.xhtml?tags=" + tagsList + "&department=" + department + "&faces-redirect=true");
+        //addTagToRequest(user);
+    }
+
+    public void searchfromHistory(UserEntity user) {
+        HttpServletRequest servletRequest = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+        if (servletRequest.getQueryString() != null) {
+            requestWithParams(tags);
+        }
+    }
+
+    private void requestWithParams(String tagsList) {
+        String sql = tagsToSQL(tagsList);
+        installationList = installfacade.search(sql, department, city);
+        initCurrentList();
+    }
+
+    private String tagsToSQL(String tagsList) {
+        showSearch = true;
+        if (tagsList.isEmpty()) {
+            tags = "no tag";
+            return "";
+        }
+        tagsList = tagsList.replace(", ", ",");
+        String tagsArray[] = tagsList.split(",");
+        HashMap<String, String> tagsMap = fillTagsMap();
+        StringBuilder sb = new StringBuilder();
+        sb.append("");
+        if (tagsArray.length > 0) {
+            sb.append("i.").append(tagsMap.get(tagsArray[0])).append(" > 0");
+            for (int i = 1; i < tagsArray.length; i++) {
+                sb.append(" AND ").append("i.").append(tagsMap.get(tagsArray[i])).append(" > 0");
+            }
+        }
+        return sb.toString();
     }
 }

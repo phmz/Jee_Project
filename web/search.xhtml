@@ -7,6 +7,7 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
     <h:head>
         <f:event listener="#{userBean.checkOtherAccess()}" type="preRenderView"/>
+        <f:event listener="#{requestBean.searchfromHistory(userBean.user)}" type="preRenderComponent"/>
         <title>Search Installation</title>
         <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
         <link href = "//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel = "stylesheet" type="text/css" ></link>
@@ -22,22 +23,10 @@
             <div class="form-group">
                 <label class="col-xs-3 control-label">Keywords</label>
                 <div class="col-xs-8">
-                    <input class="tagsinput-typeahead" type="text" id="tags-form:keywords" name="tags-form:keywords" />
+                    <input class="tagsinput-typeahead" type="text" id="keywords" name="keywords" />
                 </div>
             </div>
-            <script>
-                var tags = #{requestBean.possibleTags};
-                $('.tagsinput-typeahead').tagsinput({
-                    typeahead: {
-                        source: tags.map(function (item) {
-                            return item.name;
-                        }),
-                        afterSelect: function () {
-                            this.$element[0].value = '';
-                        }
-                    }
-                });
-            </script>
+
             <div class="form-group">
                 <label class="col-xs-3 control-label">Department</label>
                 <div class="dropdown col-xs-8">
@@ -119,9 +108,48 @@
         <script src="bootstrap/js/search.js"></script>
         <script src="bootstrap/js/changepage.js"></script>   
         <script type="text/javascript">
-                $('#star1').starrr({
-                    rating: 4
-                });
+            $('#star1').starrr({
+                rating: 4
+            });
+        </script>
+        <script>
+            var tags = #{requestBean.possibleTags};
+            $('.tagsinput-typeahead').tagsinput({
+                typeahead: {
+                    source: tags.map(function (item) {
+                        return item.name;
+                    }),
+                    afterSelect: function () {
+                        this.$element[0].value = '';
+                    }
+                }
+            });
+
+
+
+            $(function () {
+                console.log("yo");
+                var url = window.location.href;
+                var tokens = url.split("?");
+                if (tokens.length > 1) {
+                    var params = tokens[1].split("&amp;");
+                    for (var i = 0; i &lt; params.length; i++) {
+                        if (params[i].startsWith("tags=")) {
+                            var s = params[i].substring(5);
+                            s = decodeURIComponent(s);
+                            console.log("s sssssssss "+s)
+                            s = s.split(",+");
+                                                
+        
+                    for (var j = 0; j &lt; s.length; j++) {
+
+                                $('#keywords').tagsinput('add', s[j].replace(/\+/g, " "));
+                            }
+                        }
+                    }
+                }
+            });
+
         </script>
     </h:body>
 

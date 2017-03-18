@@ -62,9 +62,8 @@ and open the template in the editor.
                                                 <td>
                                                     <p data-placement="top" data-toggle="tooltip" title="Search">
                                                         <h:commandLink id="btndsearch"
-                                                                       actionListener="#{userBean.goToSearch()}"
+                                                                       actionListener="#{requestBean.searchRequest(userBean.user, requestElement.depLib, requestElement.comInsee, requestElement.tagsList)}"
                                                                        styleClass="btn btn-primary btn-xs">
-                                                            <f:actionListener binding="#{requestBean.searchRequest(userBean.user, requestElement.depLib, requestElement.comInsee, requestElement.tagsList)}"/>
                                                             <i class="glyphicon glyphicon-search"></i>
                                                         </h:commandLink>
                                                         
@@ -91,16 +90,6 @@ and open the template in the editor.
 
                             </table>
 
-                            <div class="clearfix"></div>
-                            <ul class="pagination pull-right">
-                                <li class="disabled"><a href="#"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
-                                <li class="active"><a href="#">1</a></li>
-                                <li><a href="#">2</a></li>
-                                <li><a href="#">3</a></li>
-                                <li><a href="#">4</a></li>
-                                <li><a href="#">5</a></li>
-                                <li><a href="#"><span class="glyphicon glyphicon-chevron-right"></span></a></li>
-                            </ul>
 
                         </div>
 
