@@ -6,6 +6,7 @@
 package beans;
 
 import entities.InstallationEntity;
+import entities.NotecommentEntity;
 import entities.RequestEntity;
 import entities.UserEntity;
 import javax.inject.Named;
@@ -65,7 +66,7 @@ public class RequestBean implements Serializable {
     private boolean showSearch = false;
 
     private List<RequestEntity> requestHistory;
-    
+
     public boolean isShowSearch() {
         return showSearch;
     }
@@ -366,5 +367,36 @@ public class RequestBean implements Serializable {
             }
         }
         return sb.toString();
+    }
+
+    List<NotecommentEntity> ratings = new ArrayList<>();
+
+    public List<NotecommentEntity> getRatings() {
+        return ratings;
+    }
+
+    public void setRatings(List<NotecommentEntity> ratings) {
+        this.ratings = ratings;
+    }
+
+    public void initRatings(String insNumeroInstall, int index) {
+        System.out.println("Initializing ratings");
+        ratings = installfacade.getRatings(insNumeroInstall);
+        for (NotecommentEntity note : ratings) {
+            String email = note.getNotecommentEntityPK().getEmail().split("@")[0];
+            int size = email.length();
+            email = email.substring(0, size / 2 + 1);
+            StringBuilder sb = new StringBuilder();
+            sb.append(email);
+            for (int i = 0; i < size; i++) {
+                sb.append("*");
+            }
+            note.getNotecommentEntityPK().setEmail(sb.toString());
+        }
+        for (NotecommentEntity note : ratings) {
+            System.out.println(note.getNotecommentEntityPK().getEmail() + " " + note.getNote() + " " + note.getComment());
+        }
+                RequestContext.getCurrentInstance().update("tags-form:uirepeat:"+index+":panelRatingModal");
+
     }
 }

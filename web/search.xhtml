@@ -100,11 +100,49 @@
                                 <div class="col-xs-12 col-sm-12 col-md-7 excerpet">
                                     <h3><a href="#" title="">#{installation.insNom}</a></h3>
                                     <p>Small description #{loop.index}, address = #{requestBean.getInstallationAddress(installation)}</p>						
-                                    <span class="plus"><a href="#" title="Lorem ipsum"><i class="glyphicon glyphicon-plus"></i></a></span>
+                                    <span class="plus">
+                                        <p:commandLink oncomplete="$('#ratingsModal#{loop.index}').modal('show');" action="#{requestBean.initRatings(installation.insNumeroInstall, loop.index)}"  >
+                                        <i class="glyphicon glyphicon-plus"></i>
+                                        </p:commandLink>
+                                    </span>
                                 </div>
                                 <span class="clearfix borda"></span>
                             </article>
+                            <h:panelGroup id="panelRatingModal">
+                            <div id="ratingsModal#{loop.index}" class="modal fade in">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-body">
+                                            <h4>#{installation.insNom}</h4>
+                                            <table id="ratingsTable" class="table table-bordred table-striped">
+                                                <thead>
+                                                    <th>User</th>
+                                                    <th>Rating</th>
+                                                    <th>Comment</th>
+                                                </thead>
+                                                <h:panelGroup id="ratingsSection">
+                                                    <ui:repeat id="ratingsUirepeat" var="rating" value="#{requestBean.ratings}" varStatus="loop">
+                                                        <tbody>
+                                                            <tr>
+                                                                <td>#{rating.notecommentEntityPK.email}</td>
+                                                                <td>#{rating.note}</td>
+                                                                <td>#{rating.comment}</td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </ui:repeat>
+                                                </h:panelGroup>
+                                            </table>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <div class="btn-group">
+                                                <button class="btn btn-primary"><span class="glyphicon glyphicon-check"></span> Close</button>
+                                            </div>
+                                        </div>
 
+                                    </div><!-- /.modal-content -->
+                                </div><!-- /.modal-dalog -->
+                            </div><!-- /.modal -->
+                            </h:panelGroup>
                         </ui:repeat>
                     </h:panelGroup>
                 </h:panelGroup>
