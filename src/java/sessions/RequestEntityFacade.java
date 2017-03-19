@@ -65,7 +65,7 @@ public class RequestEntityFacade extends AbstractFacade<RequestEntity> {
     }
 
     public List<RequestEntity> searchUserHistory(UserEntity user) {
-        String queryString = "SELECT r.* FROM Request r WHERE r.email = '" + user.getEmail() + "'";
+        String queryString = "SELECT r.* FROM Request r WHERE r.email = '" + user.getEmail() + "' ORDER BY r.daterequest DESC";
         Query query = em.createNativeQuery(queryString, RequestEntity.class);
         return query.getResultList();
     }
