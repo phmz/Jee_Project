@@ -5,6 +5,7 @@
  */
 package beans;
 
+import entities.EquipementEntity;
 import entities.InstallationEntity;
 import entities.NotecommentEntity;
 import entities.RequestEntity;
@@ -22,6 +23,7 @@ import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 import org.primefaces.context.RequestContext;
 import sessions.CommuneEntityFacade;
+import sessions.EquipementEntityFacade;
 import sessions.InstallationEntityFacade;
 import sessions.NotecommentEntityFacade;
 import sessions.RequestEntityFacade;
@@ -46,6 +48,9 @@ public class RequestBean implements Serializable {
     
     @EJB
     NotecommentEntityFacade notefacade;
+    
+    @EJB
+    EquipementEntityFacade equipementfacade;
 
     private RequestEntity request;
 
@@ -71,14 +76,17 @@ public class RequestBean implements Serializable {
 
     private List<RequestEntity> requestHistory;
 
-    public void debugComment(int index, String email, String insNumeroInstall, String nomInstall) {
+    public void addComment(int index, String email, String insNumeroInstall, String nomInstall) {
         System.out.println("nom "+nomInstall);
         System.out.println("index "+index);
         String comment = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("uirepeat:"+index+":rateForm:commentInput");
-        String rating = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("uirepeat:"+index+":rateForm:starMenu");
-        System.out.println("comment "+comment+" rating "+rating);
-        notefacade.rate(email, insNumeroInstall, comment, rating);
-        initRatings(insNumeroInstall, index);
+        String starMenu = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("uirepeat:"+index+":rateForm:starMenu");
+        if ( starMenu == null) {
+            if ( comment == null) {comment = "";
+            }
+            return;}
+        System.out.println("comment "+comment+" rating "+starMenu);
+        notefacade.rate(email, insNumeroInstall, comment, starMenu);
         RequestContext.getCurrentInstance().update("resultdiv");
     }
 
@@ -413,5 +421,16 @@ public class RequestBean implements Serializable {
             System.out.println(note.getNotecommentEntityPK().getEmail() + " " + note.getNote() + " " + note.getComment());
         }
         RequestContext.getCurrentInstance().update("uirepeat:" + index + ":panelRatingModal");
+    }
+    
+    public String getEquipementsString(String insNumeroInstall){        
+        List<EquipementEntity> equipements = equipementfacade.getEquipementsByInsNumeroInstall(insNumeroInstall);
+        if(equipements.isEmpty()){
+            return "";
+        }
+        StringBuilder sb = new StringBuilder();
+        equipements.forEach(e -> sb.append(e.getEquNom()).append(", "));
+        sb.setLength(sb.length() - 2);
+        return sb.toString();
     }
 }

@@ -105,7 +105,10 @@
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-7 excerpet">
                                     <h3><a title="">#{installation.insNom}</a></h3>
-                                    <p>Small description #{loop.index}, address = #{requestBean.getInstallationAddress(installation)}</p>						
+                                    <br/>
+                                    <p> <h4>Infrastructure pr&eacute;sente : </h4><br/>
+                                    #{requestBean.getEquipementsString(installation.insNumeroInstall)}
+                                    </p>
                                     <span class="plus">
                                         <p:commandLink oncomplete="$('#ratingsModal#{loop.index}').modal('show');" action="#{requestBean.initRatings(installation.insNumeroInstall, loop.index)}"  >
                                         <i class="glyphicon glyphicon-plus"></i>
@@ -181,7 +184,7 @@
                                             <div class="modal-footer">
                                                 <div class="btn-group">
                                                     <button class="btn btn-danger" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancel</button>
-                                                    <p:commandLink type="submit" onclick="$('#rateModal#{loop.index}').modal('hide');" styleClass="btn btn-primary" action="#{requestBean.debugComment(loop.index, userBean.email, installation.insNumeroInstall, installation.insNom)}"  >
+                                                    <p:commandLink type="submit" onclick="$('#rateModal#{loop.index}').modal('hide');" styleClass="btn btn-primary" action="#{requestBean.addComment(loop.index, userBean.email, installation.insNumeroInstall, installation.insNom)}"  >
                                                         <f:ajax render="section"/>
                                                         <i class="glyphicon glyphicon-check"></i>
                                                         <h:outputText value=" Submit"/>
