@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package beans;
 
 import javax.inject.Named;
@@ -17,10 +12,6 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import sessions.DepartementEntityFacade;
 
-/**
- *
- * @author phm
- */
 @Named(value = "departement")
 @SessionScoped
 @ManagedBean
@@ -46,7 +37,6 @@ public class DepartementBean implements Serializable {
         departments = new LinkedHashMap<>();
         List<String> arrayLibDep = facade.getAllNamesDepartement();        
         arrayLibDep.forEach(s -> departments.put(s,s));               
-        System.out.println(departments.size());
     }
 
     public DepartementEntity getDepartement() {

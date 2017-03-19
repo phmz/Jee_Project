@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package sessions;
 
 import entities.CommuneEntity;
@@ -14,10 +9,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
-/**
- *
- * @author phm
- */
 @Stateless
 public class CommuneEntityFacade extends AbstractFacade<CommuneEntity> {
 
@@ -47,7 +38,6 @@ public class CommuneEntityFacade extends AbstractFacade<CommuneEntity> {
 
     public String getComInsee(String cityLib, String depLib) {
         String queryCityLib = "SELECT c.* FROM Commune c NATURAL JOIN Departement d WHERE d.depLib = '"+depLib+"' AND c.comLib = '" + cityLib + "'";
-        System.out.println("queryCityLib "+queryCityLib);
         Query query = em.createNativeQuery(queryCityLib, CommuneEntity.class);
         List<CommuneEntity> communeList = query.getResultList();
         return communeList.get(0).getComInsee();

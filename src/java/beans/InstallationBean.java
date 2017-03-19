@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package beans;
 
 import entities.InstallationEntity;
@@ -17,10 +12,6 @@ import javax.enterprise.context.SessionScoped;
 import org.primefaces.context.RequestContext;
 import sessions.InstallationEntityFacade;
 
-/**
- *
- * @author phm
- */
 @Named(value = "installationBean")
 @SessionScoped
 public class InstallationBean implements Serializable {
@@ -76,16 +67,7 @@ public class InstallationBean implements Serializable {
             }
             note.getNotecommentEntityPK().setEmail(sb.toString());
         }
-        for (NotecommentEntity note : ratings) {
-            System.out.println(note.getNotecommentEntityPK().getEmail() + " " + note.getNote() + " " + note.getComment());
-        }
-    }
-    
-    public void ratingsInfo() {
-                for (NotecommentEntity note : ratings) {
-            System.out.println(note.getNotecommentEntityPK().getEmail() + " " + note.getNote() + " " + note.getComment());
-        }
-    }
+    }    
     
     public List<NotecommentEntity> updateRatings(String insNumeroInstall) {
         return facade.getRatings(insNumeroInstall);
@@ -95,7 +77,6 @@ public class InstallationBean implements Serializable {
         initRatings(insNumeroInstall);
         Map<String,Object> options = new HashMap<String, Object>();
         options.put("resizable", false);
-        System.out.println("YEEEE");
         RequestContext.getCurrentInstance().openDialog("viewRatings", options, null);
         RequestContext.getCurrentInstance().openDialog("viewRatings");
         

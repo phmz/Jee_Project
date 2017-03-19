@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package beans;
 
 import entities.EquipementEntity;
@@ -28,10 +23,6 @@ import sessions.InstallationEntityFacade;
 import sessions.NotecommentEntityFacade;
 import sessions.RequestEntityFacade;
 
-/**
- *
- * @author phm
- */
 @ManagedBean
 @Named(value = "requestBean")
 @SessionScoped
@@ -77,15 +68,12 @@ public class RequestBean implements Serializable {
     private List<RequestEntity> requestHistory;
 
     public void addComment(int index, String email, String insNumeroInstall, String nomInstall) {
-        System.out.println("nom "+nomInstall);
-        System.out.println("index "+index);
         String comment = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("uirepeat:"+index+":rateForm:commentInput");
         String starMenu = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("uirepeat:"+index+":rateForm:starMenu");
         if ( starMenu == null) {
             if ( comment == null) {comment = "";
             }
             return;}
-        System.out.println("comment "+comment+" rating "+starMenu);
         notefacade.rate(email, insNumeroInstall, comment, starMenu);
         RequestContext.getCurrentInstance().update("resultdiv");
     }
@@ -416,9 +404,6 @@ public class RequestBean implements Serializable {
                 sb.append("*");
             }
             note.getNotecommentEntityPK().setEmail(sb.toString());
-        }
-        for (NotecommentEntity note : ratings) {
-            System.out.println(note.getNotecommentEntityPK().getEmail() + " " + note.getNote() + " " + note.getComment());
         }
         RequestContext.getCurrentInstance().update("uirepeat:" + index + ":panelRatingModal");
     }
