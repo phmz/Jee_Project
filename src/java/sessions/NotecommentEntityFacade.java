@@ -41,19 +41,13 @@ public class NotecommentEntityFacade extends AbstractFacade<NotecommentEntity> {
 
     public void rate(String email, String insNumeroInstall, String comment, String rating) {
         NotecommentEntity tmp = em.find(NotecommentEntity.class, new NotecommentEntityPK(email, insNumeroInstall));
+        NotecommentEntity note = new NotecommentEntity(email, insNumeroInstall);
+        note.setComment(comment);
+        note.setNote(Integer.parseInt(rating));
         if (tmp == null) {
-            System.out.println("Note does not exist");
-            NotecommentEntity note = new NotecommentEntity(email, insNumeroInstall);
-            note.setComment(comment);
-            note.setNote(Integer.parseInt(rating));
             em.persist(note);
         } else {
-            String queryString = "INSERT INTO notecomment (email, insNumeroInstall, note, comment) VALUES ('" + email + "','" + insNumeroInstall + "','" + rating + "','" + comment + "') on duplicate key update note='" + rating + "', comment = '" + comment + "'";
-            Query query = em.createNativeQuery(queryString);
-            query.executeUpdate();
-            System.out.println(queryString);
+            em.merge(note);
         }
-
     }
-
 }
