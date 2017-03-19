@@ -137,12 +137,8 @@
                         if (params[i].startsWith("tags=")) {
                             var s = params[i].substring(5);
                             s = decodeURIComponent(s);
-                            console.log("s sssssssss "+s)
                             s = s.split(",+");
-                                                
-        
-                    for (var j = 0; j &lt; s.length; j++) {
-
+                            for (var j = 0; j &lt; s.length; j++) {
                                 $('#keywords').tagsinput('add', s[j].replace(/\+/g, " "));
                             }
                         }

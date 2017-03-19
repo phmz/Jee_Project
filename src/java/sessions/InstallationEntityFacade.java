@@ -6,6 +6,7 @@
 package sessions;
 
 import entities.InstallationEntity;
+import entities.NotecommentEntity;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -44,5 +45,12 @@ public class InstallationEntityFacade extends AbstractFacade<InstallationEntity>
         Query query = em.createNativeQuery(sb.toString(),InstallationEntity.class);
         List<InstallationEntity> array = query.getResultList();            
         return array;                
+    }
+
+    public List<NotecommentEntity> getRatings(String insNumeroInstall) {
+        String queryString = "SELECT n.* FROM noteComment n WHERE n.InsNumeroInstall = '"+insNumeroInstall+"'";
+        System.out.println(queryString);
+        Query query = em.createNativeQuery(queryString, NotecommentEntity.class);
+        return query.getResultList();
     }
 }

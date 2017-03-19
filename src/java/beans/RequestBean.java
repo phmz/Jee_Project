@@ -65,7 +65,7 @@ public class RequestBean implements Serializable {
     private boolean showSearch = false;
 
     private List<RequestEntity> requestHistory;
-
+    
     public boolean isShowSearch() {
         return showSearch;
     }
