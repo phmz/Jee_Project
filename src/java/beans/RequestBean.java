@@ -23,6 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.primefaces.context.RequestContext;
 import sessions.CommuneEntityFacade;
 import sessions.InstallationEntityFacade;
+import sessions.NotecommentEntityFacade;
 import sessions.RequestEntityFacade;
 
 /**
@@ -42,6 +43,9 @@ public class RequestBean implements Serializable {
 
     @EJB
     InstallationEntityFacade installfacade;
+    
+    @EJB
+    NotecommentEntityFacade notefacade;
 
     private RequestEntity request;
 
@@ -66,6 +70,17 @@ public class RequestBean implements Serializable {
     private boolean showSearch = false;
 
     private List<RequestEntity> requestHistory;
+
+    public void debugComment(int index, String email, String insNumeroInstall, String nomInstall) {
+        System.out.println("nom "+nomInstall);
+        System.out.println("index "+index);
+        String comment = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("uirepeat:"+index+":rateForm:commentInput");
+        String rating = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("uirepeat:"+index+":rateForm:starMenu");
+        System.out.println("comment "+comment+" rating "+rating);
+        notefacade.rate(email, insNumeroInstall, comment, rating);
+        initRatings(insNumeroInstall, index);
+        RequestContext.getCurrentInstance().update("resultdiv");
+    }
 
     public boolean isShowSearch() {
         return showSearch;
@@ -269,7 +284,7 @@ public class RequestBean implements Serializable {
                 currentInstallationList.add(installationList.get(elementPerPage * currentPage + i));
             }
         }
-        RequestContext.getCurrentInstance().update("tags-form:resultdiv");
+        RequestContext.getCurrentInstance().update("resultdiv");
         updateDataTable();
     }
 
@@ -299,7 +314,7 @@ public class RequestBean implements Serializable {
     }
 
     private void updateDataTable() {
-        RequestContext.getCurrentInstance().update("tags-form:section");
+        RequestContext.getCurrentInstance().update("section");
     }
 
     public void reset() {
@@ -381,6 +396,7 @@ public class RequestBean implements Serializable {
 
     public void initRatings(String insNumeroInstall, int index) {
         System.out.println("Initializing ratings");
+        ratings.clear();
         ratings = installfacade.getRatings(insNumeroInstall);
         for (NotecommentEntity note : ratings) {
             String email = note.getNotecommentEntityPK().getEmail().split("@")[0];
@@ -396,7 +412,6 @@ public class RequestBean implements Serializable {
         for (NotecommentEntity note : ratings) {
             System.out.println(note.getNotecommentEntityPK().getEmail() + " " + note.getNote() + " " + note.getComment());
         }
-                RequestContext.getCurrentInstance().update("tags-form:uirepeat:"+index+":panelRatingModal");
-
+        RequestContext.getCurrentInstance().update("uirepeat:" + index + ":panelRatingModal");
     }
 }

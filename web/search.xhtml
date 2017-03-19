@@ -49,11 +49,13 @@
             </div>
             <div class="form-group" id="btn-div-div">
                 <div class="col-xs-1 col-xs-offset-3" id="btn-div">
-                    <p:commandButton update="tags-form:resultdiv" class="form-control btn btn-search" actionListener="#{requestBean.addTagToRequest(userBean.user)}" value="Search" type="submit">
-                        <f:ajax render="tags-form:hiddenSearchDiv"/>
+                    <p:commandButton update=":resultdiv" class="form-control btn btn-search" actionListener="#{requestBean.addTagToRequest(userBean.user)}" value="Search" type="submit">
+                        <f:ajax render=":hiddenSearchDiv"/>
                     </p:commandButton>
                 </div>
             </div>    
+                    </h:form>   
+
             <h:panelGroup layout="block" class="container container-mrg" id="resultdiv">
                 <h:panelGroup layout="block" id="hiddenSearchDiv" rendered="#{requestBean.showSearch}">
                     <div id="searchresult-div" >
@@ -93,12 +95,16 @@
                                                     readOnly: true
                                                 });
                                             });
+                                            
+                                            $('#star#{loop.index}').click(function() {
+                                                $('#rateModal#{loop.index}').modal('show');
+                                            });
                                         </script>
                                         <li><br/></li>
                                     </ul>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-7 excerpet">
-                                    <h3><a href="#" title="">#{installation.insNom}</a></h3>
+                                    <h3><a title="">#{installation.insNom}</a></h3>
                                     <p>Small description #{loop.index}, address = #{requestBean.getInstallationAddress(installation)}</p>						
                                     <span class="plus">
                                         <p:commandLink oncomplete="$('#ratingsModal#{loop.index}').modal('show');" action="#{requestBean.initRatings(installation.insNumeroInstall, loop.index)}"  >
@@ -143,11 +149,53 @@
                                 </div><!-- /.modal-dalog -->
                             </div><!-- /.modal -->
                             </h:panelGroup>
+                            <h:form id="rateForm">
+                                <div id="rateModal#{loop.index}" class="modal fade in">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h4 class="modal-title">Rate #{installation.insNom}</h4>
+                                            </div>
+                                            <div class="modal-body">
+
+                                                <div class="form-group">
+                                                    <label class="col-xs-3 control-label">Rating</label>
+                                                    <div class="dropdown col-xs-8">
+                                                        <h:selectOneMenu id="starMenu" style="width:150px" class="dropbtn">
+                                                            <f:selectItem itemLabel="Select One" itemValue="" />
+                                                            <f:selectItem itemLabel="0" itemValue="0" />
+                                                            <f:selectItem itemLabel="1" itemValue="1" />
+                                                            <f:selectItem itemLabel="2" itemValue="2" />
+                                                            <f:selectItem itemLabel="3" itemValue="3" />
+                                                            <f:selectItem itemLabel="4" itemValue="4" />
+                                                            <f:selectItem itemLabel="5" itemValue="5" />
+                                                        </h:selectOneMenu>
+                                                    </div>
+                                                    <label class="col-xs-3 control-label">Comment</label>
+                                                    <div class="col-xs-8">
+                                                        <p:inputTextarea id="commentInput" rows="10" cols="50" styleClass="form-control" maxlength="250" />
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <div class="modal-footer">
+                                                <div class="btn-group">
+                                                    <button class="btn btn-danger" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancel</button>
+                                                    <p:commandLink type="submit" onclick="$('#rateModal#{loop.index}').modal('hide');" styleClass="btn btn-primary" action="#{requestBean.debugComment(loop.index, userBean.email, installation.insNumeroInstall, installation.insNom)}"  >
+                                                        <f:ajax render="section"/>
+                                                        <i class="glyphicon glyphicon-check"></i>
+                                                        <h:outputText value=" Submit"/>
+                                                    </p:commandLink>
+                                                </div>
+                                            </div>
+                                        </div><!-- /.modal-content -->
+                                    </div><!-- /.modal-dalog -->
+                                </div><!-- /.modal -->
+                            </h:form>
                         </ui:repeat>
                     </h:panelGroup>
                 </h:panelGroup>
             </h:panelGroup>
-        </h:form>   
         <link rel="stylesheet" type="text/css" href="resources/css/navbar.css"></link>
         <link rel="stylesheet" type="text/css" href="resources/css/search.css"></link>
         <link rel="stylesheet" type="text/css" href="resources/css/star.css"></link>
