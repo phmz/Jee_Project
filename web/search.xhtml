@@ -185,7 +185,7 @@
                                             <div class="modal-footer">
                                                 <div class="btn-group">
                                                     <button class="btn btn-danger" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancel</button>
-                                                    <p:commandLink type="submit" onclick="$('#rateModal#{loop.index}').modal('hide');" styleClass="btn btn-primary" action="#{requestBean.addComment(loop.index, userBean.email, installation.insNumeroInstall, installation.insNom)}"  >
+                                                    <p:commandLink type="submit" onclick="$('#rateModal#{loop.index}').modal('hide');" styleClass="btn btn-primary" action="#{requestBean.addComment(loop.index, userBean.email, installation.insNumeroInstall)}"  >
                                                         <f:ajax render="section"/>
                                                         <i class="glyphicon glyphicon-check"></i>
                                                         <h:outputText value=" Submit"/>
@@ -202,6 +202,7 @@
             </h:panelGroup>
         <link rel="stylesheet" type="text/css" href="resources/css/navbar.css"></link>
         <link rel="stylesheet" type="text/css" href="resources/css/search.css"></link>
+        <link rel="stylesheet" type="text/css" href="resources/css/modal.css"></link>
         <link rel="stylesheet" type="text/css" href="resources/css/star.css"></link>
 
         <script src="bootstrap/js/search.js"></script>

@@ -3,13 +3,10 @@ package beans;
 import entities.InstallationEntity;
 import entities.NotecommentEntity;
 import java.io.Serializable;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
-import org.primefaces.context.RequestContext;
 import sessions.InstallationEntityFacade;
 
 @Named(value = "installationBean")
@@ -73,12 +70,7 @@ public class InstallationBean implements Serializable {
         return facade.getRatings(insNumeroInstall);
     }
     
-    public void showRatingModal(String insNumeroInstall) {
-        initRatings(insNumeroInstall);
-        Map<String,Object> options = new HashMap<String, Object>();
-        options.put("resizable", false);
-        RequestContext.getCurrentInstance().openDialog("viewRatings", options, null);
-        RequestContext.getCurrentInstance().openDialog("viewRatings");
-        
+    public String getName(String insNumeroInstall) {
+        return facade.getName(insNumeroInstall);
     }
 }

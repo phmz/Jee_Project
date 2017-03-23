@@ -44,4 +44,11 @@ public class InstallationEntityFacade extends AbstractFacade<InstallationEntity>
         Query query = em.createNativeQuery(queryString, NotecommentEntity.class);
         return query.getResultList();
     }
+    
+        public String getName(String insNumeroInstall) {
+        String queryString = "SELECT i.InsNom FROM Installation i WHERE i.insNumeroInstall = '" + insNumeroInstall + "'";
+        Query query = em.createNativeQuery(queryString);
+        String name = (String) query.getSingleResult();
+        return name;
+    }
 }

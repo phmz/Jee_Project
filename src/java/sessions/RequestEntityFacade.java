@@ -1,6 +1,7 @@
 package sessions;
 
 import entities.CommuneEntity;
+import entities.NotecommentEntity;
 import entities.RequestEntity;
 import entities.UserEntity;
 import java.util.List;
@@ -27,10 +28,10 @@ public class RequestEntityFacade extends AbstractFacade<RequestEntity> {
     public boolean addRequest(RequestEntity request) {
         Query query;
         RequestEntity tmp = new RequestEntity(0, request.getDepLib());
-        if(request.getComInsee() == null || request.getComInsee().isEmpty()) {
+        if (request.getComInsee() == null || request.getComInsee().isEmpty()) {
             tmp.setComInsee("");
         } else {
-            String queryCityLib = "SELECT c.* FROM Commune c WHERE c.comInsee = '"+request.getComInsee()+"'";
+            String queryCityLib = "SELECT c.* FROM Commune c WHERE c.comInsee = '" + request.getComInsee() + "'";
             query = em.createNativeQuery(queryCityLib, CommuneEntity.class);
             List<CommuneEntity> communeList = query.getResultList();
             tmp.setComInsee(communeList.get(0).getComLib());
@@ -63,7 +64,7 @@ public class RequestEntityFacade extends AbstractFacade<RequestEntity> {
 
     public void deleteRequest(int id) {
         RequestEntity request = em.find(RequestEntity.class, id);
-        if(request != null) {
+        if (request != null) {
             em.remove(request);
         }
     }

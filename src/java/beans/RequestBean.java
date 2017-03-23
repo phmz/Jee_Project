@@ -36,10 +36,10 @@ public class RequestBean implements Serializable {
 
     @EJB
     InstallationEntityFacade installfacade;
-    
+
     @EJB
     NotecommentEntityFacade notefacade;
-    
+
     @EJB
     EquipementEntityFacade equipementfacade;
 
@@ -67,15 +67,35 @@ public class RequestBean implements Serializable {
 
     private List<RequestEntity> requestHistory;
 
-    public void addComment(int index, String email, String insNumeroInstall, String nomInstall) {
-        String comment = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("uirepeat:"+index+":rateForm:commentInput");
-        String starMenu = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("uirepeat:"+index+":rateForm:starMenu");
-        if ( starMenu == null) {
-            if ( comment == null) {comment = "";
-            }
-            return;}
+    private List<NotecommentEntity> ratingHistory;
+
+    public void addComment(int index, String email, String insNumeroInstall) {
+        String comment = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("uirepeat:" + index + ":rateForm:commentInput");
+        String starMenu = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("uirepeat:" + index + ":rateForm:starMenu");
+        if (starMenu == null || starMenu.isEmpty()) {
+            return;
+        }
+        if (comment == null) {
+            comment = "";
+        }
         notefacade.rate(email, insNumeroInstall, comment, starMenu);
         RequestContext.getCurrentInstance().update("resultdiv");
+    }
+
+    public void editComment(int index, UserEntity user, String insNumeroInstall) {
+        String comment = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("commentHistory:uirepeat:" + index + ":commentInput");
+        String starMenu = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("commentHistory:uirepeat:" + index + ":starMenu");
+        if (starMenu == null || starMenu.isEmpty()) {
+            return;
+        }
+        if (comment == null) {
+            comment = "";
+        }
+        notefacade.rate(user.getEmail(), insNumeroInstall, comment, starMenu);
+        fillCommentHistory(user);
+        RequestContext.getCurrentInstance().update("commentHistory");
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.getApplication().getNavigationHandler().handleNavigation(context, null, "/commenthistory.xhtml?faces-redirect=true");
     }
 
     public boolean isShowSearch() {
@@ -179,6 +199,14 @@ public class RequestBean implements Serializable {
 
     public void setRequestHistory(List<RequestEntity> requestHistory) {
         this.requestHistory = requestHistory;
+    }
+
+    public List<NotecommentEntity> getRatingHistory() {
+        return ratingHistory;
+    }
+
+    public void setRatingHistory(List<NotecommentEntity> ratingHistory) {
+        this.ratingHistory = ratingHistory;
     }
 
     public void addTagToRequest(UserEntity user) {
@@ -323,14 +351,23 @@ public class RequestBean implements Serializable {
         currentPage = 0;
     }
 
-    public void fillHistory(UserEntity user) {
-        System.out.println("Filling history");
+    public void fillSearchHistory(UserEntity user) {
+        System.out.println("Filling search history");
         requestHistory = facade.searchUserHistory(user);
+    }
+
+    public void fillCommentHistory(UserEntity user) {
+        System.out.println("Filling comment history");
+        ratingHistory = notefacade.searchUserRatings(user);
     }
 
     public void deleteRequest(int id, UserEntity user) {
         facade.deleteRequest(id);
-        fillHistory(user);
+        fillSearchHistory(user);
+    }
+
+    public void editComment(int id, UserEntity user) {
+        fillCommentHistory(user);
     }
 
     public void searchRequest(UserEntity user, String depLib, String cityLib, String tagsList) {
@@ -407,10 +444,10 @@ public class RequestBean implements Serializable {
         }
         RequestContext.getCurrentInstance().update("uirepeat:" + index + ":panelRatingModal");
     }
-    
-    public String getEquipementsString(String insNumeroInstall){        
+
+    public String getEquipementsString(String insNumeroInstall) {
         List<EquipementEntity> equipements = equipementfacade.getEquipementsByInsNumeroInstall(insNumeroInstall);
-        if(equipements.isEmpty()){
+        if (equipements.isEmpty()) {
             return "";
         }
         StringBuilder sb = new StringBuilder();

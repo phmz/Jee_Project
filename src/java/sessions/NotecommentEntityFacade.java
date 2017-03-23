@@ -2,7 +2,9 @@ package sessions;
 
 import entities.NotecommentEntity;
 import entities.NotecommentEntityPK;
+import entities.UserEntity;
 import java.math.BigDecimal;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -30,7 +32,7 @@ public class NotecommentEntityFacade extends AbstractFacade<NotecommentEntity> {
         return bd == null ? 0 : bd.intValue();
     }
 
-    public void rate(String email, String insNumeroInstall, String comment, String rating) {
+    public boolean rate(String email, String insNumeroInstall, String comment, String rating) {
         NotecommentEntity tmp = em.find(NotecommentEntity.class, new NotecommentEntityPK(email, insNumeroInstall));
         NotecommentEntity note = new NotecommentEntity(email, insNumeroInstall);
         note.setComment(comment);
@@ -40,5 +42,13 @@ public class NotecommentEntityFacade extends AbstractFacade<NotecommentEntity> {
         } else {
             em.merge(note);
         }
+        return true;
+    }
+    
+    
+    public List<NotecommentEntity> searchUserRatings(UserEntity user) {
+        String queryString = "SELECT n.* FROM Notecomment n WHERE n.email = '" + user.getEmail() + "' ORDER BY n.datecomment DESC";
+        Query query = em.createNativeQuery(queryString, NotecommentEntity.class);
+        return query.getResultList();
     }
 }

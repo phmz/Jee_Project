@@ -27,9 +27,15 @@
                         <ul class="nav navbar-nav navbar-right">
                             <li><a href="#">#{userBean.email}</a></li>
                             <li>
-                                <h:commandLink actionListener="#{userBean.goToHistory()}">
-                                    <f:actionListener binding="#{requestBean.fillHistory(userBean.user)}"/>
-                                    <h:outputText value="History" />
+                                <h:commandLink actionListener="#{userBean.goToSearchHistory()}">
+                                    <f:actionListener binding="#{requestBean.fillSearchHistory(userBean.user)}"/>
+                                    <h:outputText value="Search History" />
+                                </h:commandLink>
+                            </li>
+                            <li>
+                                <h:commandLink actionListener="#{userBean.goToCommentHistory()}">
+                                    <f:actionListener binding="#{requestBean.fillCommentHistory(userBean.user)}"/>
+                                    <h:outputText value="Comment History" />
                                 </h:commandLink>
                             </li>
                             <li>

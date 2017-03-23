@@ -104,7 +104,7 @@ public class UserBean implements Serializable {
         if (userTmp == null) {
             // We did not find the userTmp in the db
             System.out.println("LOGIN FAILED USER DOES NOT EXIST");
-           FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", "Username and password do not match!"));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", "Username and password do not match!"));
             // DO SOMETHING
         } else {
             String passwordDigested = digestPassword(this.user.getPassword());
@@ -164,12 +164,20 @@ public class UserBean implements Serializable {
         context.getApplication().getNavigationHandler().handleNavigation(context, null, "/login.xhtml?faces-redirect=true");
     }
 
-    public void goToHistory() {
+    public void goToSearchHistory() {
         if (!isUserLogin) {
             return;
         }
         FacesContext context = FacesContext.getCurrentInstance();
-        context.getApplication().getNavigationHandler().handleNavigation(context, null, "/history.xhtml?faces-redirect=true");
+        context.getApplication().getNavigationHandler().handleNavigation(context, null, "/searchhistory.xhtml?faces-redirect=true");
+    }
+
+    public void goToCommentHistory() {
+        if (!isUserLogin) {
+            return;
+        }
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.getApplication().getNavigationHandler().handleNavigation(context, null, "/commenthistory.xhtml?faces-redirect=true");
     }
 
     public void checkLoginAccess() {
