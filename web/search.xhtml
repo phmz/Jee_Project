@@ -50,6 +50,7 @@
             <div class="form-group" id="btn-div-div">
                 <div class="col-xs-1 col-xs-offset-3" id="btn-div">
                     <p:commandButton update=":resultdiv" class="form-control btn btn-search" actionListener="#{requestBean.addTagToRequest(userBean.user)}" value="Search" type="submit">
+                        <f:event listener="#{userBean.checkOtherAccess()}" type="preRenderView"/>
                         <f:ajax render=":hiddenSearchDiv"/>
                     </p:commandButton>
                 </div>
