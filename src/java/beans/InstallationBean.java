@@ -4,9 +4,12 @@ import entities.InstallationEntity;
 import entities.NotecommentEntity;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.context.FacesContext;
+import org.primefaces.context.RequestContext;
 import sessions.InstallationEntityFacade;
 
 @Named(value = "installationBean")
@@ -17,9 +20,9 @@ public class InstallationBean implements Serializable {
     InstallationEntityFacade facade;
 
     List<NotecommentEntity> ratings;
-
-    InstallationEntity installation;
-
+    
+    List<InstallationEntity> topInstallationUserDep;
+    
     /**
      * Creates a new instance of InstallationBean
      */
@@ -42,12 +45,12 @@ public class InstallationBean implements Serializable {
         this.ratings = ratings;
     }
 
-    public InstallationEntity getInstallation() {
-        return installation;
+    public List<InstallationEntity> getTopInstallationUserDep() {
+        return topInstallationUserDep;
     }
 
-    public void setInstallation(InstallationEntity installation) {
-        this.installation = installation;
+    public void setTopInstallationUserDep(List<InstallationEntity> topInstallationUserDep) {
+        this.topInstallationUserDep = topInstallationUserDep;
     }
 
     public void initRatings(String insNumeroInstall) {
@@ -72,5 +75,12 @@ public class InstallationBean implements Serializable {
     
     public String getName(String insNumeroInstall) {
         return facade.getName(insNumeroInstall);
+    }
+    
+    public void initTopInstall() {
+        Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+        String department = params.get("hiddenDep");
+        topInstallationUserDep = facade.getTopInstallation(department);
+        RequestContext.getCurrentInstance().update("section");
     }
 }

@@ -4,7 +4,8 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:p="http://primefaces.org/ui"
       xmlns:jsf="http://xmlns.jcp.org/jsf"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
     <h:head>
         <f:event listener="#{userBean.checkLoginAccess()}" type="preRenderView"/>
         <title>Login</title>
@@ -87,7 +88,133 @@
                 </div>
             </div>
         </div>
+        <h:form prependId="false">
+            <h:panelGroup id="section">
+                <div class="gallery">
+                    <div class="container">
+                        <div class="row">
+                            <ui:repeat id="uirepeat" var="installation" value="#{installationBean.topInstallationUserDep}" varStatus="loop">
+                                <div class="col-xs-3 gallery-item" id="map" align="center">
+                                    <h3 style="text-align: center;">#{installation.insNom.length() > 20 ? installation.insNom.subSequence(0, 20) : installation.insNom}</h3>
+                                    <iframe width="250" height="140" frameborder="1"  class="thumbnail" src="#{requestBean.getInstallationGoogleUrl(installation)}"></iframe>
+                                    <span class="plus">
+                                        <p:commandLink oncomplete="$('#ratingsModal#{loop.index}').modal('show');" action="#{requestBean.initRatings(installation.insNumeroInstall, loop.index)}"  >
+                                            <i class="glyphicon glyphicon-plus"></i>
+                                        </p:commandLink>
+                                    </span>
+                                    <div class='starrr' id="star#{loop.index}" style="padding-left: 50%"/>
+                                    <script>
+                                        $(function () {
+                                            $('#star#{loop.index}').starrr({
+                                                rating: #{notecommentBean.printNote(installation.insNumeroInstall)},
+                                                readOnly: true
+                                            });
+                                        });
+                                    </script>
+                                </div>
+
+                                <h:panelGroup id="panelRatingModal">
+                                    <div id="ratingsModal#{loop.index}" class="modal fade in">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-body">
+                                                    <h4>#{installation.insNom}</h4>
+                                                    <table id="ratingsTable" class="table table-bordred table-striped">
+                                                        <thead>
+                                                            <th>User</th>
+                                                            <th>Rating</th>
+                                                            <th>Comment</th>
+                                                        </thead>
+                                                        <h:panelGroup id="ratingsSection">
+                                                            <ui:repeat id="ratingsUirepeat" var="rating" value="#{requestBean.ratings}" varStatus="loop">
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td>#{rating.notecommentEntityPK.email}</td>
+                                                                        <td>#{rating.note}</td>
+                                                                        <td>#{rating.comment}</td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </ui:repeat>
+                                                        </h:panelGroup>
+                                                    </table>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <div class="btn-group">
+                                                        <a class="btn btn-primary" data-dismiss="modal" ><span class="glyphicon glyphicon-remove"></span> Close</a>
+                                                    </div>
+                                                </div>
+
+                                            </div><!-- /.modal-content -->
+                                        </div><!-- /.modal-dalog -->
+                                    </div><!-- /.modal -->
+                                </h:panelGroup>
+                            </ui:repeat>
+                        </div>
+                    </div>
+                </div>
+            </h:panelGroup>
+        </h:form>
+        <h:form id="hiddenForm" prependId="false">
+            <p:remoteCommand name="initTopInstall" actionListener="#{installationBean.initTopInstall}"/>
+            <h:inputHidden id="hiddenDep" />
+        </h:form>
+        <script>
+            var dep;
+
+            var options = {
+                enableHighAccuracy: true,
+                timeout: 5000,
+                maximumAge: 0
+            };
+
+            function success(pos) {
+                var crd = pos.coords;
+                var geocoder = new google.maps.Geocoder();
+                var latLng = new google.maps.LatLng(crd.latitude, crd.longitude);
+                geocoder.geocode({
+                    'latLng': latLng
+                }, function (results, status) {
+                    if (status === 'OK') {
+                        var elt = results[0].address_components;
+                        for (i in elt) {
+                            if (elt[i].types[0] === 'administrative_area_level_2') {
+                                dep = elt[i].long_name;
+                                console.log(dep);
+                                $("#hiddenDep").val(dep);
+                                initTopInstall();
+                            }
+                        }
+                    } else {
+                        alert('Geocode was not successful for the following reason: ' + status);
+                    }
+                });
+            }
+            ;
+
+            function error(err) {
+                console.warn('ERROR(' + err.code + '): ' + err.message);
+            }
+            ;
+
+            function initialize() {
+                navigator.geolocation.getCurrentPosition(success, error, options);
+            }
+            ;
+
+            if (dep !== undefined) {
+                console.log(dep);
+            } else {
+                console.log("nogood");
+            }
+        </script>
+        <link rel="stylesheet" type="text/css" href="resources/css/background.css"></link>      
+        <link rel="stylesheet" type="text/css" href="resources/css/search.css"></link>
+        <link rel="stylesheet" type="text/css" href="resources/css/modal.css"></link>
         <link rel="stylesheet" type="text/css" href="resources/css/login.css"></link>
         <script src="bootstrap/js/login.js"></script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDQp7RamUbJjbyVmtpWomeTDpIcycDU1aQ&amp;callback=initialize"></script>
+        <link rel="stylesheet" type="text/css" href="resources/css/star.css"></link>        
+        <script src="bootstrap/js/search.js"></script>
+
     </h:body>
 </html>

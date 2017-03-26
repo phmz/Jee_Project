@@ -22,33 +22,42 @@ public class InstallationEntityFacade extends AbstractFacade<InstallationEntity>
     public InstallationEntityFacade() {
         super(InstallationEntity.class);
     }
-    
-    public List<InstallationEntity> search(String tags, String departementLib, String comInsee){
+
+    public List<InstallationEntity> search(String tags, String departementLib, String comInsee) {
         StringBuilder sb = new StringBuilder();
         sb.append("SELECT i.* FROM Installation i NATURAL JOIN Commune c NATURAL JOIN Departement d WHERE d.deplib = '").append(departementLib).append("'");
         if (comInsee != null && !comInsee.isEmpty()) {
             sb.append(" AND c.comInsee = '").append(comInsee).append("'");
         }
-        if(tags != null && !tags.isEmpty()) {
+        if (tags != null && !tags.isEmpty()) {
             sb.append(" AND ").append(tags);
         }
-        System.out.println("INSTALLATION QUERY: "+sb.toString());
-        Query query = em.createNativeQuery(sb.toString(),InstallationEntity.class);
-        List<InstallationEntity> array = query.getResultList();            
-        return array;                
+        System.out.println("INSTALLATION QUERY: " + sb.toString());
+        Query query = em.createNativeQuery(sb.toString(), InstallationEntity.class);
+        List<InstallationEntity> array = query.getResultList();
+        return array;
     }
 
     public List<NotecommentEntity> getRatings(String insNumeroInstall) {
-        String queryString = "SELECT n.* FROM noteComment n WHERE n.InsNumeroInstall = '"+insNumeroInstall+"'";
+        String queryString = "SELECT n.* FROM noteComment n WHERE n.InsNumeroInstall = '" + insNumeroInstall + "'";
         System.out.println(queryString);
         Query query = em.createNativeQuery(queryString, NotecommentEntity.class);
         return query.getResultList();
     }
-    
-        public String getName(String insNumeroInstall) {
+
+    public String getName(String insNumeroInstall) {
         String queryString = "SELECT i.InsNom FROM Installation i WHERE i.insNumeroInstall = '" + insNumeroInstall + "'";
         Query query = em.createNativeQuery(queryString);
         String name = (String) query.getSingleResult();
         return name;
+    }
+
+    public List<InstallationEntity> getTopInstallation(String department) {
+        String queryString = "SELECT i.* FROM Notecomment n NATURAL JOIN Installation i NATURAL JOIN Commune c NATURAL JOIN Departement d "
+                + "WHERE d.deplib = '" + department+"'"
+                + "GROUP BY i.InsNumeroInstall ORDER BY AVG(n.note) DESC LIMIT 8";
+        System.out.println(queryString);
+        Query query = em.createNativeQuery(queryString, InstallationEntity.class);
+        return query.getResultList();
     }
 }
