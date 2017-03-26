@@ -1,69 +1,74 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
-    <h:head>
-        <f:event listener="#{userBean.checkOtherAccess()}" type="preRenderView"/>
-        <title>Search Installation</title>
-        <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
-        <link href = "//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel = "stylesheet" type="text/css" ></link>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-        <link rel="stylesheet" href="//cdn.jsdelivr.net/bootstrap.tagsinput/0.4.2/bootstrap-tagsinput.css" />
-        <script src="//cdn.jsdelivr.net/bootstrap.tagsinput/0.4.2/bootstrap-tagsinput.min.js"></script>
-        <script src="bootstrap/js/typeahead.bundle.js"></script>
-    </h:head>
-    <h:body>
-        <ui:include src="/WEB-INF/header.xhtml"/>
-        <h:form>
-            <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-            <script src="http://getbootstrap.com/dist/js/bootstrap.min.js"></script>
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-12">
-                        <h4>Search History</h4>
-                        <div class="table-responsive">
-                            <table id="historyTable" class="table table-bordred table-striped">
-                                <thead>
-                                    <th>City</th>
-                                    <th>Department</th>
-                                    <th>Tags</th>
-                                    <th>Search</th>
-                                    <th>Delete</th>
-                                </thead>
-                                <h:panelGroup id="section">
-                                    <ui:repeat id="uirepeat" var="requestElement" value="#{requestBean.requestHistory}" varStatus="loop">
-                                        <tbody>
-                                            <tr>
-                                                <td>#{requestElement.comInsee.length() eq 0 ? "N/A" : requestElement.comInsee}</td>
-                                                <td>#{requestElement.depLib}</td>
-                                                <td>#{requestElement.tagsList.length() eq 0 ? "No tag" : requestElement.tagsList}</td>
-                                                <td>
-                                                    <h:commandLink id="btndsearch"
-                                                                   actionListener="#{requestBean.searchRequest(userBean.user, requestElement.depLib, requestElement.comInsee, requestElement.tagsList)}"
-                                                                   styleClass="btn btn-primary btn-xs">
-                                                        <i class="glyphicon glyphicon-search"></i>
-                                                    </h:commandLink>
-                                                </td>
-                                                <td>
-                                                    <h:commandLink id="btndelete"
-                                                                   actionListener="#{requestBean.deleteRequest(requestElement.idrequest, userBean.user)}"
-                                                                   styleClass="btn btn-danger btn-xs">
-                                                        <i class="glyphicon glyphicon-trash"></i>
-                                                    </h:commandLink>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </ui:repeat>
-                                </h:panelGroup>
-                            </table>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+<h:head>
+    <f:event listener="#{userBean.checkOtherAccess()}" type="preRenderView" />
+    <title>Search Installation</title>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet" type="text/css"></link>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/bootstrap.tagsinput/0.4.2/bootstrap-tagsinput.css" />
+    <script src="//cdn.jsdelivr.net/bootstrap.tagsinput/0.4.2/bootstrap-tagsinput.min.js"></script>
+    <script src="bootstrap/js/typeahead.bundle.js"></script>
+</h:head>
+<h:body>
+    <ui:include src="/WEB-INF/header.xhtml" />
+    <h:form>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Search History</h3>
+                            <div class="pull-right">
+                                <span class="clickable filter" data-toggle="tooltip" title="Toggle table filter" data-container="body">
+                                        <i class="glyphicon glyphicon-filter"></i>
+                                    </span>
+                            </div>
                         </div>
+                        <div class="panel-body">
+                            <input type="text" class="form-control" id="search-table-filter" data-action="filter" data-filters="#search-table" placeholder="Filter Search" />
+                        </div>
+                        <table class="table table-hover" id="search-table">
+                            <thead>
+                                <th>City</th>
+                                <th>Department</th>
+                                <th>Tags</th>
+                                <th>Search</th>
+                                <th>Delete</th>
+                            </thead>
+                            <h:panelGroup id="section">
+                                <tbody>
+                                    <ui:repeat id="uirepeat" var="requestElement" value="#{requestBean.requestHistory}" varStatus="loop">
+                                        <tr>
+                                            <td>#{requestElement.comInsee.length() eq 0 ? "N/A" : requestElement.comInsee}</td>
+                                            <td>#{requestElement.depLib}</td>
+                                            <td>#{requestElement.tagsList.length() eq 0 ? "No tag" : requestElement.tagsList}</td>
+                                            <td>
+                                                <h:commandLink id="btndsearch" actionListener="#{requestBean.searchRequest(userBean.user, requestElement.depLib, requestElement.comInsee, requestElement.tagsList)}" styleClass="btn btn-primary btn-xs">
+                                                    <i class="glyphicon glyphicon-search"></i>
+                                                </h:commandLink>
+                                            </td>
+                                            <td>
+                                                <h:commandLink id="btndelete" actionListener="#{requestBean.deleteRequest(requestElement.idrequest, userBean.user)}" styleClass="btn btn-danger btn-xs">
+                                                    <i class="glyphicon glyphicon-trash"></i>
+                                                </h:commandLink>
+                                            </td>
+                                        </tr>
+                                    </ui:repeat>
+                                </tbody>
+
+                            </h:panelGroup>
+                        </table>
                     </div>
                 </div>
             </div>
-        </h:form>
-        <link rel="stylesheet" type="text/css" href="resources/css/background.css"></link>      
-        <link rel="stylesheet" type="text/css" href="resources/css/navbar.css"></link>
-    </h:body>
+        </div>
+    </h:form>
+    <link rel="stylesheet" type="text/css" href="resources/css/filter.css"></link>
+    <script src="bootstrap/js/filter.js"></script>
+    <link rel="stylesheet" type="text/css" href="resources/css/background.css"></link>
+    <link rel="stylesheet" type="text/css" href="resources/css/navbar.css"></link>
+</h:body>
+
 </html>

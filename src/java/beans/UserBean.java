@@ -77,7 +77,6 @@ public class UserBean implements Serializable {
             if (passwordDigested == null) {
                 // Could not digest passwordDigested
                 System.out.println("REGISTER FAILED DIGEST FAILED");
-                // DO SOMETHING
                 return;
             }
             this.user = new UserEntity(this.user.getEmail(), passwordDigested);
@@ -86,14 +85,11 @@ public class UserBean implements Serializable {
                 password = passwordDigested;
                 isUserLogin = true;
                 goToSearch();
-                // DO SOMETHING
             } else {
                 System.out.println("REGISTER FAILED");
-                // DO SOMETHING
             }
         } else {
             System.out.println("REGISTER FAILED USER ALREADY EXIST");
-            // DO SOMETHING
         }
     }
 
@@ -104,14 +100,13 @@ public class UserBean implements Serializable {
         if (userTmp == null) {
             // We did not find the userTmp in the db
             System.out.println("LOGIN FAILED USER DOES NOT EXIST");
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", "Username and password do not match!"));
-            // DO SOMETHING
+            FacesContext.getCurrentInstance().addMessage("login-form:login-email", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", "Username and password do not match!"));
+            FacesContext.getCurrentInstance().addMessage("login-form:login-password", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", "Username and password do not match!"));
         } else {
             String passwordDigested = digestPassword(this.user.getPassword());
             if (passwordDigested == null) {
                 // Could not digest passwordDigested
                 System.out.println("LOGIN FAILED DIGEST FAILED");
-                // DO SOMETHING
                 return;
             }
             this.user = new UserEntity(this.user.getEmail(), passwordDigested);
@@ -119,12 +114,11 @@ public class UserBean implements Serializable {
                 System.out.println("LOGIN SUCCESS");
                 password = passwordDigested;
                 isUserLogin = true;
-                // DO SOMETHING
                 goToSearch();
             } else {
                 System.out.println("LOGIN FAILED WRONG PASSWORD");
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", "Username and password do not match!"));
-                // DO SOMETHING
+                FacesContext.getCurrentInstance().addMessage("login-form:login-email", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", "Username and password do not match!"));
+                FacesContext.getCurrentInstance().addMessage("login-form:login-password", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", "Username and password do not match!"));
             }
         }
     }
