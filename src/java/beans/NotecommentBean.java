@@ -14,14 +14,14 @@ import sessions.NotecommentEntityFacade;
 @Named(value = "notecommentBean")
 @SessionScoped
 public class NotecommentBean implements Serializable {
-    
+
     @EJB
     NotecommentEntityFacade facade;
-    
+
     private NotecommentEntity noteEntity;
-    
+
     private int rating;
-    
+
     private String comment;
 
     public int getRating() {
@@ -39,8 +39,6 @@ public class NotecommentBean implements Serializable {
     public void setComment(String comment) {
         this.comment = comment;
     }
-    
-    
 
     /**
      * Creates a new instance of NotecommentBean
@@ -63,13 +61,13 @@ public class NotecommentBean implements Serializable {
     public void setNoteEntity(NotecommentEntity noteEntity) {
         this.noteEntity = noteEntity;
     }
-    
+
     public int printNote(String insNumeroInstall) {
         return facade.getAvg(insNumeroInstall);
     }
-    
+
     public void printNotecomment() {
-        System.out.println("rating "+rating+" "+comment);
+        System.out.println("rating " + rating + " " + comment);
     }
-    
+
 }

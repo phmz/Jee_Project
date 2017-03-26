@@ -37,7 +37,7 @@ public class CommuneEntityFacade extends AbstractFacade<CommuneEntity> {
     }
 
     public String getComInsee(String cityLib, String depLib) {
-        String queryCityLib = "SELECT c.* FROM Commune c NATURAL JOIN Departement d WHERE d.depLib = '"+depLib+"' AND c.comLib = '" + cityLib + "'";
+        String queryCityLib = "SELECT c.* FROM Commune c NATURAL JOIN Departement d WHERE d.depLib = '" + depLib + "' AND c.comLib = '" + cityLib + "'";
         Query query = em.createNativeQuery(queryCityLib, CommuneEntity.class);
         List<CommuneEntity> communeList = query.getResultList();
         return communeList.get(0).getComInsee();

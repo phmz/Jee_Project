@@ -22,8 +22,8 @@ public class DepartementEntityFacade extends AbstractFacade<DepartementEntity> {
     public DepartementEntityFacade() {
         super(DepartementEntity.class);
     }
-    
-    public List<String> getAllNamesDepartement(){
+
+    public List<String> getAllNamesDepartement() {
         Query query = em.createNamedQuery("DepartementEntity.findAll", DepartementEntity.class);
         List<DepartementEntity> list = query.getResultList();
         ArrayList<String> array = new ArrayList<>();
@@ -39,5 +39,5 @@ public class DepartementEntityFacade extends AbstractFacade<DepartementEntity> {
         });
         return array;
     }
-    
+
 }

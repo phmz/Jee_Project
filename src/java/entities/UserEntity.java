@@ -1,4 +1,3 @@
-
 package entities;
 
 import java.io.Serializable;
@@ -88,5 +87,5 @@ public class UserEntity implements Serializable {
     public String toString() {
         return "entities.UserEntity[ email=" + email + " ]";
     }
-    
+
 }

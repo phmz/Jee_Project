@@ -16,27 +16,27 @@ import sessions.DepartementEntityFacade;
 @SessionScoped
 @ManagedBean
 public class DepartementBean implements Serializable {
-    
+
     @EJB
     DepartementEntityFacade facade;
 
     private DepartementEntity departement;
-    
+
     private Map<String, String> departments;
-    
+
     /**
      * Creates a new instance of Departement
      */
     public DepartementBean() {
         departement = new DepartementEntity();
     }
-    
+
     @PostConstruct
     public void init() {
         System.out.println("INIT STARTED");
         departments = new LinkedHashMap<>();
-        List<String> arrayLibDep = facade.getAllNamesDepartement();        
-        arrayLibDep.forEach(s -> departments.put(s,s));               
+        List<String> arrayLibDep = facade.getAllNamesDepartement();
+        arrayLibDep.forEach(s -> departments.put(s, s));
     }
 
     public DepartementEntity getDepartement() {
@@ -53,5 +53,5 @@ public class DepartementBean implements Serializable {
 
     public void setDepartments(Map<String, String> departments) {
         this.departments = departments;
-    }               
+    }
 }

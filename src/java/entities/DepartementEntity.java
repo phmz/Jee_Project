@@ -100,5 +100,5 @@ public class DepartementEntity implements Serializable {
     public String toString() {
         return "entities.DepartementEntity[ depCode=" + depCode + " ]";
     }
-    
+
 }

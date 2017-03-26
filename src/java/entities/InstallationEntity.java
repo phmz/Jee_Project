@@ -431,5 +431,5 @@ public class InstallationEntity implements Serializable {
     public String toString() {
         return "entities.InstallationEntity[ insNumeroInstall=" + insNumeroInstall + " ]";
     }
-    
+
 }

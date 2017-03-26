@@ -74,5 +74,5 @@ public class NotecommentEntityPK implements Serializable {
     public String toString() {
         return "entities.NotecommentEntityPK[ email=" + email + ", insNumeroInstall=" + insNumeroInstall + " ]";
     }
-    
+
 }

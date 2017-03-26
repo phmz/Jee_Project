@@ -100,8 +100,6 @@ public class RequestEntity implements Serializable {
     public void setUser(UserEntity user) {
         this.user = user;
     }
-    
-    
 
     @Override
     public int hashCode() {
@@ -127,5 +125,5 @@ public class RequestEntity implements Serializable {
     public String toString() {
         return "entities.RequestEntity[ idrequest=" + idrequest + " ]";
     }
-    
+
 }

@@ -100,5 +100,5 @@ public class EquipementtypeEntity implements Serializable {
     public String toString() {
         return "entities.EquipementtypeEntity[ equipementTypeCode=" + equipementTypeCode + " ]";
     }
-    
+
 }

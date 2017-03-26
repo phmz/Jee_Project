@@ -55,7 +55,7 @@ public class InstallationEntityFacade extends AbstractFacade<InstallationEntity>
 
     public List<InstallationEntity> getTopInstallation(String department) {
         String queryString = "SELECT i.* FROM Notecomment n NATURAL JOIN Installation i NATURAL JOIN Commune c NATURAL JOIN Departement d "
-                + "WHERE d.deplib = '" + department+"' "
+                + "WHERE d.deplib = '" + department + "' "
                 + "GROUP BY i.InsNumeroInstall ORDER BY AVG(n.note) DESC LIMIT 8";
         System.out.println(queryString);
         Query query = em.createNativeQuery(queryString, InstallationEntity.class);

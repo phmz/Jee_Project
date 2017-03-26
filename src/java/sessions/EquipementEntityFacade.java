@@ -21,12 +21,13 @@ public class EquipementEntityFacade extends AbstractFacade<EquipementEntity> {
     public EquipementEntityFacade() {
         super(EquipementEntity.class);
     }
-    public List<EquipementEntity> getEquipementsByInsNumeroInstall(String insNumeroInstall){
+
+    public List<EquipementEntity> getEquipementsByInsNumeroInstall(String insNumeroInstall) {
         String queryString = "SELECT e.* FROM Equipement e WHERE e.insNumeroInstall = '" + insNumeroInstall + "'";
-        Query query = em.createNativeQuery(queryString,EquipementEntity.class);
+        Query query = em.createNativeQuery(queryString, EquipementEntity.class);
         List<EquipementEntity> array = query.getResultList();
-        
+
         return array;
     }
-    
+
 }

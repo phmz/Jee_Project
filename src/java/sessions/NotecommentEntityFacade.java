@@ -44,8 +44,7 @@ public class NotecommentEntityFacade extends AbstractFacade<NotecommentEntity> {
         }
         return true;
     }
-    
-    
+
     public List<NotecommentEntity> searchUserRatings(UserEntity user) {
         String queryString = "SELECT n.* FROM Notecomment n WHERE n.email = '" + user.getEmail() + "' ORDER BY n.datecomment DESC";
         Query query = em.createNativeQuery(queryString, NotecommentEntity.class);

@@ -19,7 +19,7 @@ public class UserEntityFacade extends AbstractFacade<UserEntity> {
     public UserEntityFacade() {
         super(UserEntity.class);
     }
-    
+
     public boolean registerUser(UserEntity user) {
         UserEntity tmp = em.find(UserEntity.class, user.getEmail());
         if (tmp == null) {
@@ -32,5 +32,5 @@ public class UserEntityFacade extends AbstractFacade<UserEntity> {
     public UserEntity findUser(UserEntity user) {
         return em.find(UserEntity.class, user.getEmail());
     }
-    
+
 }

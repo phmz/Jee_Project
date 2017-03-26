@@ -20,9 +20,9 @@ public class InstallationBean implements Serializable {
     InstallationEntityFacade facade;
 
     List<NotecommentEntity> ratings;
-    
+
     List<InstallationEntity> topInstallationUserDep;
-    
+
     /**
      * Creates a new instance of InstallationBean
      */
@@ -67,16 +67,16 @@ public class InstallationBean implements Serializable {
             }
             note.getNotecommentEntityPK().setEmail(sb.toString());
         }
-    }    
-    
+    }
+
     public List<NotecommentEntity> updateRatings(String insNumeroInstall) {
         return facade.getRatings(insNumeroInstall);
     }
-    
+
     public String getName(String insNumeroInstall) {
         return facade.getName(insNumeroInstall);
     }
-    
+
     public void initTopInstall() {
         Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
         String department = params.get("hiddenDep");

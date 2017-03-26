@@ -89,5 +89,5 @@ public class NotecommentEntity implements Serializable {
     public String toString() {
         return "entities.NotecommentEntity[ notecommentEntityPK=" + notecommentEntityPK + " ]";
     }
-    
+
 }

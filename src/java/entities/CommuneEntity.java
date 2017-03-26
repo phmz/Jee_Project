@@ -107,5 +107,5 @@ public class CommuneEntity implements Serializable {
     public String toString() {
         return "entities.CommuneEntity[ comInsee=" + comInsee + " ]";
     }
-    
+
 }

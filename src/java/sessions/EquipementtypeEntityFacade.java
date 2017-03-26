@@ -19,5 +19,5 @@ public class EquipementtypeEntityFacade extends AbstractFacade<EquipementtypeEnt
     public EquipementtypeEntityFacade() {
         super(EquipementtypeEntity.class);
     }
-    
+
 }
