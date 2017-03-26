@@ -74,15 +74,15 @@
                                 <p:commandButton class="form-control btn btn-search" actionListener="#{requestBean.nextPage()}" value="Next" type="submit">
                                 </p:commandButton>
                             </div>
-                        </div>  
+                            <br/><br/>
+                        </div>
                     </div>
-
                     <h:panelGroup layout="block" class="col-xs-12 col-sm-6 col-md-12" id="section">
                         <ui:repeat id="uirepeat" var="installation" value="#{requestBean.currentInstallationList}" varStatus="loop">
 
                             <article id="articleresult" class="search-result row">
                                 <div class="col-xs-12 col-sm-12 col-md-3" id="map">
-                                    <iframe width="250" height="140" frameborder="1" style="border:0" class="thumbnail" src="#{requestBean.getInstallationGoogleUrl(installation)}"></iframe>
+                                    <iframe width="250" height="140" frameborder="1" class="thumbnail" src="#{requestBean.getInstallationGoogleUrl(installation)}"></iframe>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-2">
                                     <ul class="meta-search">
