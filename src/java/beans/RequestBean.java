@@ -221,17 +221,27 @@ public class RequestBean implements Serializable {
         String tagsArray[] = tag.split(",");
         HashMap<String, String> tagsMap = fillTagsMap();
         StringBuilder sb = new StringBuilder();
+        StringBuilder tagsSb = new StringBuilder();
         sb.append("");
+        tags = "";
+        tagsArray = cleansTags(tagsArray, tagsMap);
+        
         if (tagsArray.length > 0) {
             final String elt = tagsMap.get(tagsArray[0]);
             if (elt != null) {
+                tagsSb.append(tagsArray[0]);
                 sb.append("i.").append(elt).append(" > 0");
-                for (int i = 1; i < tagsArray.length; i++) {
-                    sb.append(" AND ").append("i.").append(tagsMap.get(tagsArray[i])).append(" > 0");
+            }
+            for (int i = 1; i < tagsArray.length; i++) {
+                String tagsTmp = tagsMap.get(tagsArray[i]);
+                if (tagsTmp != null) {
+                    tagsSb.append(", ").append(tagsArray[i]);
+                    sb.append(" AND ").append("i.").append(tagsTmp).append(" > 0");
                 }
             }
         }
-        tags = tag.replace(",", ", ");
+        tags = tagsSb.toString();
+        System.out.println(tags);
         launchRequest(sb.toString(), user);
     }
 
@@ -408,6 +418,7 @@ public class RequestBean implements Serializable {
         }
         tagsList = tagsList.replace(", ", ",");
         String tagsArray[] = tagsList.split(",");
+
         HashMap<String, String> tagsMap = fillTagsMap();
         StringBuilder sb = new StringBuilder();
         sb.append("");
@@ -457,5 +468,15 @@ public class RequestBean implements Serializable {
         equipements.forEach(e -> sb.append(e.getEquNom()).append(", "));
         sb.setLength(sb.length() - 2);
         return sb.toString();
+    }
+
+    private String[] cleansTags(String[] tagsArray, HashMap<String,String> tagsMap) {
+        ArrayList<String> tmpsTags = new ArrayList<>();
+        for(String tag : tagsArray){
+            if(tagsMap.get(tag) != null){
+                tmpsTags.add(tag);
+            }            
+        }                
+        return tmpsTags.toArray(new String[tmpsTags.size()]);      
     }
 }
