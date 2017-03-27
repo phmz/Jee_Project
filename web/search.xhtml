@@ -4,7 +4,7 @@
 <h:head>
     <f:event listener="#{userBean.checkOtherAccess()}" type="preRenderView" />
     <f:event listener="#{requestBean.searchfromHistory(userBean.user)}" type="preRenderComponent" />
-    <title>Search Installation</title>
+    <title>Search Sports Facilities</title>
     <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet" type="text/css"></link>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
@@ -101,7 +101,7 @@
                             <h3><a title="">#{installation.insNom}</a></h3>
                             <br/>
                             <p>
-                                <h4>Infrastructure pr&eacute;sente : </h4><br/> #{requestBean.getEquipementsString(installation.insNumeroInstall)}
+                                <h4>Avalaible infrastructure : </h4><br/> #{requestBean.getEquipementsString(installation.insNumeroInstall)}
                             </p>
                             <span class="plus">
                                         <p:commandLink oncomplete="$('#ratingsModal#{loop.index}').modal('show');" action="#{requestBean.initRatings(installation.insNumeroInstall, loop.index)}"  >
