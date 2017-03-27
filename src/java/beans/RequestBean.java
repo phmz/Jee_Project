@@ -223,9 +223,12 @@ public class RequestBean implements Serializable {
         StringBuilder sb = new StringBuilder();
         sb.append("");
         if (tagsArray.length > 0) {
-            sb.append("i.").append(tagsMap.get(tagsArray[0])).append(" > 0");
-            for (int i = 1; i < tagsArray.length; i++) {
-                sb.append(" AND ").append("i.").append(tagsMap.get(tagsArray[i])).append(" > 0");
+            final String elt = tagsMap.get(tagsArray[0]);
+            if (elt != null) {
+                sb.append("i.").append(elt).append(" > 0");
+                for (int i = 1; i < tagsArray.length; i++) {
+                    sb.append(" AND ").append("i.").append(tagsMap.get(tagsArray[i])).append(" > 0");
+                }
             }
         }
         tags = tag.replace(",", ", ");
